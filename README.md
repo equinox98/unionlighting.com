@@ -1,2 +1,2 @@
 # unionlighting.com
-shopify thene
+shopify theme
