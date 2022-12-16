@@ -1,0 +1,71 @@
+{% assign newsletter_tags = 'prospect' %}
+{% assign button_style = block.settings.button_style | default: 'primary' %}
+
+{%- if template contains 'password' %}
+  {% assign newsletter_tags = newsletter_tags | append: ', password page' %}
+{%- else -%}
+  {% assign newsletter_tags = newsletter_tags | append: ', newsletter' %}
+{%- endif -%}
+
+{% unless input_id %}
+  {% assign input_id = 'newsletter_email' %}
+{% endunless %}
+
+{% form 'customer', id: form_id, class: 'newsletter' %}
+  {% if form.posted_successfully? %}
+    <p class="newsletter-success">
+      {{ 'general.newsletter.success' | t }}
+    </p>
+  {% else %}
+
+
+                    <div class="kromad-custom-newsletter">
+                      <div class="newsletter-radio">
+                        <input type="radio" id="fr-check" name="contact[tags]" value="shopify_francais" required />
+						<label for="fr-check">Français</label>
+                      </div>
+                      
+                      <div class="newsletter-radio">
+                      	<input type="radio" id="en-check" name="contact[tags]" value="shopify_english" required />
+                      	<label for="en-check">English</label>
+                      </div>
+                    </div>
+
+    <!--<input
+      type="hidden"
+      name="contact[tags]"
+      value="{{ newsletter_tags }}"
+    >-->
+
+    <div class="form-fields-inline">
+      <div class="form-field newsletter-input">
+        <input
+          class="form-field-input form-field-text"
+          name="contact[email]"
+          id="{{ input_id }}"
+          type="email"
+          aria-label="{{ 'general.newsletter.placeholder' | t }}"
+        >
+
+        <label
+          class="form-field-title"
+          for="{{ input_id }}"
+        >
+          {{ 'general.newsletter.placeholder' | t }}
+        </label>
+      </div>
+
+      <button
+        class="
+          form-field
+          newsletter-submit
+          button-{{ button_style }}
+        "
+        name="subscribe"
+        type="submit"
+      >
+        {{ 'general.newsletter.subscribe' | t }}
+      </button>
+    </div>
+  {% endif %}
+{% endform %}
