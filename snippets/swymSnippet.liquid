@@ -190,6 +190,9 @@ window.SwymCallbacks.push(function(swat) {
       });
     });
   }
+
+  // Get the money format for the store from shopify
+  window.SwymOverrideMoneyFormat = {{ shop.money_format | json}};
 </script>
 <style id="swym-product-view-defaults">
   /* Hide when not loaded */

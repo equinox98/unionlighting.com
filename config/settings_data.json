@@ -1663,14 +1663,14 @@
       "1594762009925"
     ],
     "blocks": {
-      "fe3756c8-4d6a-458a-a821-7d7ecdac51e4": {
-        "type": "shopify:\/\/apps\/instagram-feed-story-tiktok\/blocks\/social-widget\/508b8d5b-b176-4dc6-a0ba-2b222db6eb79",
+      "3062113278708352188": {
+        "type": "shopify:\/\/apps\/gropulse-rich-snippets-for-seo\/blocks\/gropulse-rich-snippets\/067179e8-363f-48e1-8ee4-5891cda502fa",
         "disabled": false,
         "settings": {
         }
       },
-      "3062113278708352188": {
-        "type": "shopify:\/\/apps\/gropulse-rich-snippets-for-seo\/blocks\/gropulse-rich-snippets\/067179e8-363f-48e1-8ee4-5891cda502fa",
+      "1c1ff43b-f828-40a8-b88a-fb4bb1c1c9a6": {
+        "type": "shopify:\/\/apps\/instagram-feed-story-tiktok\/blocks\/social-widget\/508b8d5b-b176-4dc6-a0ba-2b222db6eb79",
         "disabled": false,
         "settings": {
         }
