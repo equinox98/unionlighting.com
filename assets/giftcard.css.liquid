@@ -1,0 +1,3834 @@
+{% assign font_family_override = false %}
+  {% if settings.font_family_override %}
+   {% assign font_family_override = 'inherit' %}
+  {% endif %}
+{%- comment -%}type_body{%- endcomment -%}
+  
+{%- assign fonts_type_body_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_body_family = font_family_override -%}
+  {%- assign fonts_type_body_style = 'normal' -%}
+  {%- assign fonts_type_body_weight = 400 -%}
+  {%- assign fonts_type_body_style_italic = 'italic' -%}
+  {%- assign fonts_type_body_weight_bolder = 700 -%}
+  {%- assign fonts_type_body_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_body_family = settings.type_body.family | append: ',' | append: settings.type_body.fallback_families -%}
+  {%- assign fonts_type_body_style = settings.type_body.style -%}
+  {%- assign fonts_type_body_weight = settings.type_body.weight | times: 1 -%}
+  {{ settings.type_body | font_face: font_display: fonts_type_body_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_body_style_italic = settings.type_body | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_body | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_display }}
+  
+  {%- comment -%}Bolder{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 700 -%}
+  {%- if fonts_type_body_weight > 700 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_body_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_body_bolder = settings.type_body | font_modify: 'weight', 'bolder' -%}
+  {%- assign fonts_type_body_weight_bolder = fonts_type_body_bolder.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_body_bolder | font_face: font_display: fonts_type_body_display }}
+  {{ fonts_type_body_bolder | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_display }}
+    
+  {%- comment -%}Lighter{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 300 -%}
+  {%- if fonts_type_body_weight < 300 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_body_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_body_lighter = settings.type_body | font_modify: 'weight', 'lighter' -%}
+  {%- assign fonts_type_body_weight_lighter = fonts_type_body_lighter.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_body_lighter | font_face: font_display: fonts_type_body_display }}
+  {{ fonts_type_body_lighter | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_display }}
+    
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_body_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial,lighter,bolder' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_body_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_body_family = font_family -%}
+    {%- assign fonts_type_body_style = font_style -%}
+    {%- assign fonts_type_body_weight = font_weight -%}
+    {%- assign fonts_type_body_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_body_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_body_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_body_bold{%- endcomment -%}
+  
+{%- assign fonts_type_body_bold_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_body_bold_family = font_family_override -%}
+  {%- assign fonts_type_body_bold_style = 'normal' -%}
+  {%- assign fonts_type_body_bold_weight = 400 -%}
+  {%- assign fonts_type_body_bold_style_italic = 'italic' -%}
+  {%- assign fonts_type_body_bold_weight_bolder = 700 -%}
+  {%- assign fonts_type_body_bold_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_body_bold_family = settings.type_body_bold.family | append: ',' | append: settings.type_body_bold.fallback_families -%}
+  {%- assign fonts_type_body_bold_style = settings.type_body_bold.style -%}
+  {%- assign fonts_type_body_bold_weight = settings.type_body_bold.weight | times: 1 -%}
+  {{ settings.type_body_bold | font_face: font_display: fonts_type_body_bold_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_body_bold_style_italic = settings.type_body_bold | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_body_bold | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_bold_display }}
+  
+  {%- comment -%}Bolder{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 700 -%}
+  {%- if fonts_type_body_bold_weight > 700 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_body_bold_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_body_bold_bolder = settings.type_body_bold | font_modify: 'weight', 'bolder' -%}
+  {%- assign fonts_type_body_bold_weight_bolder = fonts_type_body_bold_bolder.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_body_bold_bolder | font_face: font_display: fonts_type_body_bold_display }}
+  {{ fonts_type_body_bold_bolder | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_bold_display }}
+    
+  {%- comment -%}Lighter{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 300 -%}
+  {%- if fonts_type_body_bold_weight < 300 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_body_bold_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_body_bold_lighter = settings.type_body_bold | font_modify: 'weight', 'lighter' -%}
+  {%- assign fonts_type_body_bold_weight_lighter = fonts_type_body_bold_lighter.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_body_bold_lighter | font_face: font_display: fonts_type_body_bold_display }}
+  {{ fonts_type_body_bold_lighter | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_bold_display }}
+    
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_body_bold_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial,lighter,bolder' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_body_bold_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_body_bold_family = font_family -%}
+    {%- assign fonts_type_body_bold_style = font_style -%}
+    {%- assign fonts_type_body_bold_weight = font_weight -%}
+    {%- assign fonts_type_body_bold_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_body_bold_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_body_bold_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_heading{%- endcomment -%}
+  
+{%- assign fonts_type_heading_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_heading_family = font_family_override -%}
+  {%- assign fonts_type_heading_style = 'normal' -%}
+  {%- assign fonts_type_heading_weight = 400 -%}
+  {%- assign fonts_type_heading_style_italic = 'italic' -%}
+  {%- assign fonts_type_heading_weight_bolder = 700 -%}
+  {%- assign fonts_type_heading_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_heading_family = settings.type_heading.family | append: ',' | append: settings.type_heading.fallback_families -%}
+  {%- assign fonts_type_heading_style = settings.type_heading.style -%}
+  {%- assign fonts_type_heading_weight = settings.type_heading.weight | times: 1 -%}
+  {{ settings.type_heading | font_face: font_display: fonts_type_heading_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_heading_style_italic = settings.type_heading | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_heading | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_heading_display }}
+  
+  {%- comment -%}Bolder{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 700 -%}
+  {%- if fonts_type_heading_weight > 700 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_heading_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_heading_bolder = settings.type_heading | font_modify: 'weight', 'bolder' -%}
+  {%- assign fonts_type_heading_weight_bolder = fonts_type_heading_bolder.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_heading_bolder | font_face: font_display: fonts_type_heading_display }}
+  {{ fonts_type_heading_bolder | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_heading_display }}
+    
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_heading_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial,bolder' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_heading_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_heading_family = font_family -%}
+    {%- assign fonts_type_heading_style = font_style -%}
+    {%- assign fonts_type_heading_weight = font_weight -%}
+    {%- assign fonts_type_heading_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_heading_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_heading_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_menu{%- endcomment -%}
+  
+{%- assign fonts_type_menu_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_menu_family = font_family_override -%}
+  {%- assign fonts_type_menu_style = 'normal' -%}
+  {%- assign fonts_type_menu_weight = 400 -%}
+  {%- assign fonts_type_menu_style_italic = 'italic' -%}
+  {%- assign fonts_type_menu_weight_bolder = 700 -%}
+  {%- assign fonts_type_menu_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_menu_family = settings.type_menu.family | append: ',' | append: settings.type_menu.fallback_families -%}
+  {%- assign fonts_type_menu_style = settings.type_menu.style -%}
+  {%- assign fonts_type_menu_weight = settings.type_menu.weight | times: 1 -%}
+  {{ settings.type_menu | font_face: font_display: fonts_type_menu_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_menu_style_italic = settings.type_menu | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_menu | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_menu_display }}
+  
+  {%- comment -%}Bolder{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 700 -%}
+  {%- if fonts_type_menu_weight > 700 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_menu_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_menu_bolder = settings.type_menu | font_modify: 'weight', 'bolder' -%}
+  {%- assign fonts_type_menu_weight_bolder = fonts_type_menu_bolder.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_menu_bolder | font_face: font_display: fonts_type_menu_display }}
+  {{ fonts_type_menu_bolder | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_menu_display }}
+    
+  {%- comment -%}Lighter{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 300 -%}
+  {%- if fonts_type_menu_weight < 300 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_menu_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_menu_lighter = settings.type_menu | font_modify: 'weight', 'lighter' -%}
+  {%- assign fonts_type_menu_weight_lighter = fonts_type_menu_lighter.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_menu_lighter | font_face: font_display: fonts_type_menu_display }}
+  {{ fonts_type_menu_lighter | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_menu_display }}
+    
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_menu_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial,lighter,bolder' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_menu_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_menu_family = font_family -%}
+    {%- assign fonts_type_menu_style = font_style -%}
+    {%- assign fonts_type_menu_weight = font_weight -%}
+    {%- assign fonts_type_menu_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_menu_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_menu_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_section{%- endcomment -%}
+  
+{%- assign fonts_type_section_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_section_family = font_family_override -%}
+  {%- assign fonts_type_section_style = 'normal' -%}
+  {%- assign fonts_type_section_weight = 400 -%}
+  {%- assign fonts_type_section_style_italic = 'italic' -%}
+  {%- assign fonts_type_section_weight_bolder = 700 -%}
+  {%- assign fonts_type_section_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_section_family = settings.type_section.family | append: ',' | append: settings.type_section.fallback_families -%}
+  {%- assign fonts_type_section_style = settings.type_section.style -%}
+  {%- assign fonts_type_section_weight = settings.type_section.weight | times: 1 -%}
+  {{ settings.type_section | font_face: font_display: fonts_type_section_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_section_style_italic = settings.type_section | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_section | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_section_display }}
+  
+  {%- comment -%}Bolder{%- endcomment -%}
+
+  {%- assign fonts_weight_adjustment_default = 700 -%}
+  {%- if fonts_type_section_weight > 700 -%}
+    {%- assign fonts_weight_adjustment_default = fonts_type_section_weight -%}
+  {%- endif -%}
+  {%- assign fonts_type_section_bolder = settings.type_section | font_modify: 'weight', 'bolder' -%}
+  {%- assign fonts_type_section_weight_bolder = fonts_type_section_bolder.weight | default: fonts_weight_adjustment_default -%}
+  {{ fonts_type_section_bolder | font_face: font_display: fonts_type_section_display }}
+  {{ fonts_type_section_bolder | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_section_display }}
+    
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_section_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial,bolder' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_section_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_section_family = font_family -%}
+    {%- assign fonts_type_section_style = font_style -%}
+    {%- assign fonts_type_section_weight = font_weight -%}
+    {%- assign fonts_type_section_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_section_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_section_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_button{%- endcomment -%}
+  
+{%- assign fonts_type_button_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_button_family = font_family_override -%}
+  {%- assign fonts_type_button_style = 'normal' -%}
+  {%- assign fonts_type_button_weight = 400 -%}
+  {%- assign fonts_type_button_style_italic = 'italic' -%}
+  {%- assign fonts_type_button_weight_bolder = 700 -%}
+  {%- assign fonts_type_button_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_button_family = settings.type_button.family | append: ',' | append: settings.type_button.fallback_families -%}
+  {%- assign fonts_type_button_style = settings.type_button.style -%}
+  {%- assign fonts_type_button_weight = settings.type_button.weight | times: 1 -%}
+  {{ settings.type_button | font_face: font_display: fonts_type_button_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_button_style_italic = settings.type_button | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_button | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_button_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_button_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_button_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_button_family = font_family -%}
+    {%- assign fonts_type_button_style = font_style -%}
+    {%- assign fonts_type_button_weight = font_weight -%}
+    {%- assign fonts_type_button_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_button_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_button_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_product_price{%- endcomment -%}
+  
+{%- assign fonts_type_product_price_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_product_price_family = font_family_override -%}
+  {%- assign fonts_type_product_price_style = 'normal' -%}
+  {%- assign fonts_type_product_price_weight = 400 -%}
+  {%- assign fonts_type_product_price_style_italic = 'italic' -%}
+  {%- assign fonts_type_product_price_weight_bolder = 700 -%}
+  {%- assign fonts_type_product_price_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_product_price_family = settings.type_product_price.family | append: ',' | append: settings.type_product_price.fallback_families -%}
+  {%- assign fonts_type_product_price_style = settings.type_product_price.style -%}
+  {%- assign fonts_type_product_price_weight = settings.type_product_price.weight | times: 1 -%}
+  {{ settings.type_product_price | font_face: font_display: fonts_type_product_price_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_product_price_style_italic = settings.type_product_price | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_product_price | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_product_price_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_product_price_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_product_price_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_product_price_family = font_family -%}
+    {%- assign fonts_type_product_price_style = font_style -%}
+    {%- assign fonts_type_product_price_weight = font_weight -%}
+    {%- assign fonts_type_product_price_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_product_price_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_product_price_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_product_card_title{%- endcomment -%}
+  
+{%- assign fonts_type_product_card_title_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_product_card_title_family = font_family_override -%}
+  {%- assign fonts_type_product_card_title_style = 'normal' -%}
+  {%- assign fonts_type_product_card_title_weight = 400 -%}
+  {%- assign fonts_type_product_card_title_style_italic = 'italic' -%}
+  {%- assign fonts_type_product_card_title_weight_bolder = 700 -%}
+  {%- assign fonts_type_product_card_title_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_product_card_title_family = settings.type_product_card_title.family | append: ',' | append: settings.type_product_card_title.fallback_families -%}
+  {%- assign fonts_type_product_card_title_style = settings.type_product_card_title.style -%}
+  {%- assign fonts_type_product_card_title_weight = settings.type_product_card_title.weight | times: 1 -%}
+  {{ settings.type_product_card_title | font_face: font_display: fonts_type_product_card_title_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_product_card_title_style_italic = settings.type_product_card_title | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_product_card_title | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_product_card_title_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_product_card_title_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_product_card_title_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_product_card_title_family = font_family -%}
+    {%- assign fonts_type_product_card_title_style = font_style -%}
+    {%- assign fonts_type_product_card_title_weight = font_weight -%}
+    {%- assign fonts_type_product_card_title_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_product_card_title_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_product_card_title_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_product_vendor{%- endcomment -%}
+  
+{%- assign fonts_type_product_vendor_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_product_vendor_family = font_family_override -%}
+  {%- assign fonts_type_product_vendor_style = 'normal' -%}
+  {%- assign fonts_type_product_vendor_weight = 400 -%}
+  {%- assign fonts_type_product_vendor_style_italic = 'italic' -%}
+  {%- assign fonts_type_product_vendor_weight_bolder = 700 -%}
+  {%- assign fonts_type_product_vendor_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_product_vendor_family = settings.type_product_vendor.family | append: ',' | append: settings.type_product_vendor.fallback_families -%}
+  {%- assign fonts_type_product_vendor_style = settings.type_product_vendor.style -%}
+  {%- assign fonts_type_product_vendor_weight = settings.type_product_vendor.weight | times: 1 -%}
+  {{ settings.type_product_vendor | font_face: font_display: fonts_type_product_vendor_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_product_vendor_style_italic = settings.type_product_vendor | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_product_vendor | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_product_vendor_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_product_vendor_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_product_vendor_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_product_vendor_family = font_family -%}
+    {%- assign fonts_type_product_vendor_style = font_style -%}
+    {%- assign fonts_type_product_vendor_weight = font_weight -%}
+    {%- assign fonts_type_product_vendor_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_product_vendor_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_product_vendor_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_footer_heading{%- endcomment -%}
+  
+{%- assign fonts_type_footer_heading_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_footer_heading_family = font_family_override -%}
+  {%- assign fonts_type_footer_heading_style = 'normal' -%}
+  {%- assign fonts_type_footer_heading_weight = 400 -%}
+  {%- assign fonts_type_footer_heading_style_italic = 'italic' -%}
+  {%- assign fonts_type_footer_heading_weight_bolder = 700 -%}
+  {%- assign fonts_type_footer_heading_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_footer_heading_family = settings.type_footer_heading.family | append: ',' | append: settings.type_footer_heading.fallback_families -%}
+  {%- assign fonts_type_footer_heading_style = settings.type_footer_heading.style -%}
+  {%- assign fonts_type_footer_heading_weight = settings.type_footer_heading.weight | times: 1 -%}
+  {{ settings.type_footer_heading | font_face: font_display: fonts_type_footer_heading_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_footer_heading_style_italic = settings.type_footer_heading | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_footer_heading | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_footer_heading_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_footer_heading_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_footer_heading_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_footer_heading_family = font_family -%}
+    {%- assign fonts_type_footer_heading_style = font_style -%}
+    {%- assign fonts_type_footer_heading_weight = font_weight -%}
+    {%- assign fonts_type_footer_heading_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_footer_heading_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_footer_heading_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_highlights_bar{%- endcomment -%}
+  
+{%- assign fonts_type_highlights_bar_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_highlights_bar_family = font_family_override -%}
+  {%- assign fonts_type_highlights_bar_style = 'normal' -%}
+  {%- assign fonts_type_highlights_bar_weight = 400 -%}
+  {%- assign fonts_type_highlights_bar_style_italic = 'italic' -%}
+  {%- assign fonts_type_highlights_bar_weight_bolder = 700 -%}
+  {%- assign fonts_type_highlights_bar_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_highlights_bar_family = settings.type_highlights_bar.family | append: ',' | append: settings.type_highlights_bar.fallback_families -%}
+  {%- assign fonts_type_highlights_bar_style = settings.type_highlights_bar.style -%}
+  {%- assign fonts_type_highlights_bar_weight = settings.type_highlights_bar.weight | times: 1 -%}
+  {{ settings.type_highlights_bar | font_face: font_display: fonts_type_highlights_bar_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_highlights_bar_style_italic = settings.type_highlights_bar | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_highlights_bar | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_highlights_bar_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_highlights_bar_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_highlights_bar_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_highlights_bar_family = font_family -%}
+    {%- assign fonts_type_highlights_bar_style = font_style -%}
+    {%- assign fonts_type_highlights_bar_weight = font_weight -%}
+    {%- assign fonts_type_highlights_bar_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_highlights_bar_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_highlights_bar_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_signpost{%- endcomment -%}
+  
+{%- assign fonts_type_signpost_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_signpost_family = font_family_override -%}
+  {%- assign fonts_type_signpost_style = 'normal' -%}
+  {%- assign fonts_type_signpost_weight = 400 -%}
+  {%- assign fonts_type_signpost_style_italic = 'italic' -%}
+  {%- assign fonts_type_signpost_weight_bolder = 700 -%}
+  {%- assign fonts_type_signpost_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_signpost_family = settings.type_signpost.family | append: ',' | append: settings.type_signpost.fallback_families -%}
+  {%- assign fonts_type_signpost_style = settings.type_signpost.style -%}
+  {%- assign fonts_type_signpost_weight = settings.type_signpost.weight | times: 1 -%}
+  {{ settings.type_signpost | font_face: font_display: fonts_type_signpost_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_signpost_style_italic = settings.type_signpost | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_signpost | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_signpost_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_signpost_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_signpost_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_signpost_family = font_family -%}
+    {%- assign fonts_type_signpost_style = font_style -%}
+    {%- assign fonts_type_signpost_weight = font_weight -%}
+    {%- assign fonts_type_signpost_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_signpost_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_signpost_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+    
+
+{%- comment -%}type_body_bold{%- endcomment -%}
+  
+{%- assign fonts_type_body_bold_display = settings.font_display | default: 'auto' -%}
+    
+{%- if font_family_override and font_family_override != 'disable' -%}
+  {%- comment -%}Font family override{%- endcomment -%}
+  {%- assign fonts_type_body_bold_family = font_family_override -%}
+  {%- assign fonts_type_body_bold_style = 'normal' -%}
+  {%- assign fonts_type_body_bold_weight = 400 -%}
+  {%- assign fonts_type_body_bold_style_italic = 'italic' -%}
+  {%- assign fonts_type_body_bold_weight_bolder = 700 -%}
+  {%- assign fonts_type_body_bold_weight_lighter = 300 -%}
+{%- else -%}
+    
+  {%- comment -%}Normal{%- endcomment -%}
+
+  {%- assign fonts_type_body_bold_family = settings.type_body_bold.family | append: ',' | append: settings.type_body_bold.fallback_families -%}
+  {%- assign fonts_type_body_bold_style = settings.type_body_bold.style -%}
+  {%- assign fonts_type_body_bold_weight = settings.type_body_bold.weight | times: 1 -%}
+  {{ settings.type_body_bold | font_face: font_display: fonts_type_body_bold_display }}
+
+  {%- comment -%}Italic{%- endcomment -%}
+
+  {%- assign fonts_type_body_bold_style_italic = settings.type_body_bold | font_modify: 'style', 'italic' | map: 'style' | default: 'italic' -%}
+  {{ settings.type_body_bold | font_modify: 'style', 'italic' | font_face: font_display: fonts_type_body_bold_display }}
+  
+{%- comment -%}Custom{%- endcomment -%}
+{%- assign font_family = 'type_body_bold_custom' -%}
+
+{%- assign font_textarea = settings[font_family] -%}
+{%- assign font_textarea_split = font_textarea | newline_to_br | split: '<br />' -%}
+{%- assign font_additional_weights = 'initial' | split: ',' -%}
+
+{%- for font in font_textarea_split -%}
+  {%- assign font_split = font | split: ':' -%}
+  {%- assign font_weight = 400 -%}
+  {%- assign font_weight_name = 'initial' -%}
+  {%- assign font_style = 'normal' -%}
+  {%- assign font_style_name = 'initial' -%}
+
+  {%- if font_split.size == 1 -%}
+    {%- assign font_file = font_split[0] | strip -%}
+  {%- else -%}
+    {%- assign font_weight_style_space_to_hyphen = font_split[0] | replace: ' ', '-' -%}
+    {%- assign font_weight_style = font_weight_style_space_to_hyphen | split: '-' -%}
+
+    {%- if font_weight_style.size == 1 -%}
+      {%- assign font_weight_style = font_weight_style[0] | strip | downcase -%}
+
+      {%- if font_weight_style == 'italic' -%}
+        {%- assign font_style_name = font_weight_style -%}
+      {%- else -%}
+        {%- assign font_weight_name = font_weight_style -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign font_weight_name = font_weight_style[0] | strip | downcase -%}
+      {%- assign font_style_name = font_weight_style[1] | strip | downcase -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      At this point we should have valid a valid weight and style variables,
+      we can continue onto the new iteration if it isnt valid.
+    {%- endcomment -%}
+    {%- if font_weight_name contains 'initial' != true and font_weight_name contains 'lighter' != true and font_weight_name contains 'bolder' != true -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if font_style_name != 'initial' and font_style_name != 'italic' -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if font_weight_name contains 'initial' -%}
+      {%- if font_weight_name == 'initial' -%}
+        {%- assign font_weight = 400 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'initial' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 400 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'lighter' -%}
+      {%- if font_weight_name == 'lighter' -%}
+        {%- assign font_weight = 300 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'lighter' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 300 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- elsif font_weight_name contains 'bolder' -%}
+      {%- if font_weight_name == 'bolder' -%}
+        {%- assign font_weight = 700 -%}
+      {%- else -%}
+        {%- assign font_weight_json = font_weight_name | split: 'bolder' | last | plus: 0 | json -%}
+        {%- assign font_weight_name = font_weight_name | split: font_weight_json | first -%}
+        {%- if font_weight_json contains '"' -%}
+          {%- assign font_weight = 700 -%}
+        {%- else -%}
+          {%- assign font_weight = font_weight_json -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if font_style_name == 'italic' -%}
+      {%- assign font_style = 'italic' -%}
+    {%- endif -%}
+
+    {%- assign font_file = font_split[1] | strip -%}
+  {%- endif -%}
+
+  {%- unless font_weight_name == 'initial' -%}
+    {%- unless font_additional_weights contains font_weight_name -%}
+      {%- continue -%}
+    {%- endunless -%}
+  {%- endunless -%}
+
+  {%- assign font_file_split = font_file | split: '.' -%}
+
+  {%- comment -%}
+    If the assumed file component has a format associated with it,
+    treat it as a file otherwise treat it as a family name and dont output a font face.
+  {%- endcomment -%}
+  {% if font_file_split.size > 1 %}
+    {%- assign font_file_format_index = font_file_split | size | minus: 1 -%}
+    {%- assign font_format = font_file_split[font_file_format_index] | strip -%}
+
+    {%- comment -%}
+      By checking if a font_file contains a forward slash we can
+      determine whether we should treat the file as absolute URL
+      or a file that must be sent through the file_url filter.
+
+      This allows externally hosted files to be used as custom fonts.
+    {%- endcomment -%}
+    @font-face {
+      font-family: "{{ font_family }}";
+      font-weight: {{ font_weight }};
+      font-style: {{ font_style }};
+      font-display: {{ fonts_type_body_bold_display }};
+      src:
+        url("{%- if font_file contains '/' -%}{{ font_file }}{%- else -%}{{ font_file | file_url }}{%- endif -%}")
+        format("{{ font_format }}");
+    }
+  {% else %}
+    {%- assign font_family = font_file -%}
+  {% endif %}
+
+  {%- if font_weight_name == 'initial' and font_style_name != 'italic' -%}
+    {%- assign fonts_type_body_bold_family = font_family -%}
+    {%- assign fonts_type_body_bold_style = font_style -%}
+    {%- assign fonts_type_body_bold_weight = font_weight -%}
+    {%- assign fonts_type_body_bold_style_italic = 'italic' -%}
+  {%- elsif font_weight_name == 'lighter' -%}
+    {%- assign fonts_type_body_bold_weight_lighter = font_weight -%}
+  {%- elsif font_weight_name == 'bolder' -%}
+    {%- assign fonts_type_body_bold_weight_bolder = font_weight -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- endif -%}
+{% comment %}font-sizes{% endcomment %}
+{%- assign font_size_types = 'heading-large|heading-medium|heading-1|heading-2|heading-3|heading-4|heading-5|heading-6|section-heading|highlight-banner-heading|body-larger|body-large|body-medium|body|form|body-small|body-smaller|body-smallest|body-tiny|product-card|button-small|button-medium|button-large|button-x-large|button-signpost|menu-large|menu|footer-heading|input' | split: '|' -%}
+{%- assign font_size_types_forloop_iterations = font_size_types | size | times: 2 | minus: 1 -%}
+{%- assign font_size_half_iterations_minus_one = font_size_types.size | minus: 1 -%}
+{%- assign font_size_half_iterations_plus_one = font_size_types.size | plus: 1 -%}
+{%- for i in (0..font_size_types_forloop_iterations) -%}
+  {%- assign font_size_types_index = i | modulo: font_size_types.size -%}
+  {%- assign font_size_type = font_size_types[font_size_types_index] -%}
+  {%- case font_size_type -%}
+  {%- when 'heading-large' -%}
+    {%- assign font_size_constant_scale = 2.125 -%}
+    {%- assign font_size_scale = settings.type_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -3.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -3.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-medium' -%}
+    {%- assign font_size_constant_scale = 1.875 -%}
+    {%- assign font_size_scale = settings.type_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -3.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -3.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-1' -%}
+    {%- assign font_size_constant_scale = 1.75 -%}
+    {%- assign font_size_scale = settings.type_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -3.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -3.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-2' -%}
+    {%- assign font_size_constant_scale = 1.625 -%}
+    {%- assign font_size_scale = settings.type_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-3' -%}
+    {%- assign font_size_constant_scale = 1.5 -%}
+    {%- assign font_size_scale = settings.type_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-4' -%}
+    {%- assign font_size_constant_scale = 1.25 -%}
+    {%- assign font_size_scale = settings.type_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-5' -%}
+    {%- assign font_size_constant_scale = 1.125 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'heading-6' -%}
+    {%- assign font_size_constant_scale = 1.125 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = settings.type_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'section-heading' -%}
+    {%- assign font_size_constant_scale = 1.5 -%}
+    {%- assign font_size_scale = settings.type_section_heading_size | divided_by: 100.00 -%}
+    {%- assign font_size_capitalize = settings.type_section_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'highlight-banner-heading' -%}
+    {%- assign font_size_constant_scale = 1.125 -%}
+    {%- assign font_size_scale = settings.type_highlights_size | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_highlights_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 0.6 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-larger' -%}
+    {%- assign font_size_constant_scale = 1.375 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-large' -%}
+    {%- assign font_size_constant_scale = 1.25 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-medium' -%}
+    {%- assign font_size_constant_scale = 1.125 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'form' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_body = 16.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-small' -%}
+    {%- assign font_size_constant_scale = 0.9375 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-smaller' -%}
+    {%- assign font_size_constant_scale = 0.875 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-smallest' -%}
+    {%- assign font_size_constant_scale = 0.8125 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'body-tiny' -%}
+    {%- assign font_size_constant_scale = 0.75 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'product-card' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = settings.type_product_card_size | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 0.6 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'button-small' -%}
+    {%- assign font_size_constant_scale = 0.875 -%}
+    {%- assign font_size_scale = settings.type_button_sizing | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_button_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'button-medium' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = settings.type_button_sizing | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_button_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = -1.0 -%}
+  {%- when 'button-large' -%}
+    {%- assign font_size_constant_scale = 1.125 -%}
+    {%- assign font_size_scale = settings.type_button_sizing | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_button_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = -1.0 -%}
+  {%- when 'button-x-large' -%}
+    {%- assign font_size_constant_scale = 1.3125 -%}
+    {%- assign font_size_scale = settings.type_button_sizing | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_button_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = -1.0 -%}
+  {%- when 'button-signpost' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = settings.type_signpost_sizing | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'menu-large' -%}
+    {%- assign font_size_constant_scale = 1.0625 -%}
+    {%- assign font_size_scale = settings.type_menu_size | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 0.5 -%}
+    {%- assign font_size_mobile_adjustment = -1.0 -%}
+  {%- when 'menu' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = settings.type_menu_size | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_menu_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -1.0 -%}
+    {%- assign font_size_mobile_scale = 0.5 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'footer-heading' -%}
+    {%- assign font_size_constant_scale = 1.125 -%}
+    {%- assign font_size_scale = settings.type_footer_heading_size | divided_by: 100.0 -%}
+    {%- assign font_size_capitalize = settings.type_footer_heading_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = -2.0 -%}
+    {%- assign font_size_mobile_scale = 0.4 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- when 'input' -%}
+    {%- assign font_size_constant_scale = 1.0 -%}
+    {%- assign font_size_scale = 1.0 -%}
+    {%- assign font_size_capitalize = false -%}
+    {%- assign font_size_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_scale = 1.0 -%}
+    {%- assign font_size_mobile_adjustment = 0.0 -%}
+  {%- endcase -%}
+
+  {%- unless font_size_body -%}
+    {%- assign font_size_body = settings.type_size_base -%}
+  {%- endunless -%}
+  {%- unless font_size_mobile_body -%}
+    {%- assign font_size_mobile_body = 15.0 %}
+  {%- endunless -%}
+  {%- unless font_size_capitalize -%}
+    {%- assign font_size_capitalize_adjustment = 0.0 -%}
+    {%- assign font_size_mobile_capitalize_adjustment = 0.0 -%}
+  {%- endunless -%}
+
+  {%- assign font_size_rem = font_size_body | times: font_size_constant_scale | times: font_size_scale | plus: font_size_capitalize_adjustment | divided_by: 16.0 -%}
+  {%- assign font_size_mobile_scale_1 = font_size_scale | minus: 1.0 | times: font_size_mobile_scale | plus: 1.0 -%}
+  {%- assign font_size_mobile_rem = font_size_mobile_body | times: font_size_constant_scale | times: font_size_mobile_scale_1 | plus: font_size_mobile_capitalize_adjustment | plus: font_size_mobile_adjustment | divided_by: 16.0 -%}
+  {%- if forloop.first %}
+    :root {
+  {%- endif -%}
+  {%- if forloop.index0 == font_size_types.size -%}
+    @media screen and (max-width: 719px) {
+      :root {
+  {%- endif -%}
+  {%- if forloop.index0 == font_size_half_iterations_plus_one -%}
+    @media screen and (max-width: 859px) {
+      :root {
+  {%- endif -%}
+
+  --font-size-{{ font_size_type }}: {% if forloop.index < font_size_types.size %}{{ font_size_rem }}{% else %}{{ font_size_mobile_rem }}{% endif %}rem;
+  --font-size-{{ font_size_type }}-base: {{ font_size_body }};
+  --font-size-{{ font_size_type }}-fcscale: {{ font_size_constant_scale }};
+  --font-size-{{ font_size_type }}-fscale: {{ font_size_scale }};
+  --font-size-{{ font_size_type }}-fadjust: {{ font_size_capitalize_adjustment }};
+  --font-size-{{ font_size_type }}-mbase: {{ font_size_mobile_body }};
+  --font-size-{{ font_size_type }}-mfcscale: {{ font_size_constant_scale }};
+  --font-size-{{ font_size_type }}-mfscale: {{ font_size_mobile_scale_1 }};
+  --font-size-{{ font_size_type }}-mfadjust: {{ font_size_mobile_adjustment }};
+
+  {%- if forloop.index0 == font_size_half_iterations_minus_one -%}
+    }
+  {%- endif -%}
+  {%- if forloop.index0 == font_size_types.size -%}
+    }}
+  {%- endif -%}
+  {%- if forloop.last -%}
+    }}
+  {%- endif -%}
+
+  {%- assign font_size_body = false -%}
+  {%- assign font_size_capitalize = false -%}
+  {%- assign font_size_capitalize_adjustment = false -%}
+  {%- assign font_size_constant_scale = false -%}
+  {%- assign font_size_mobile_adjustment = false -%}
+  {%- assign font_size_mobile_body = false %}
+  {%- assign font_size_mobile_capitalize_adjustment = false -%}
+  {%- assign font_size_mobile_rem = false -%}
+  {%- assign font_size_mobile_scale = false -%}
+  {%- assign font_size_mobile_scale_1 = false -%}
+  {%- assign font_size_rem = false -%}
+  {%- assign font_size_scale = false -%}
+{%- endfor -%}
+/* External libraries */
+/*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+/**
+ * 1. Change the default font family in all browsers (opinionated).
+ * 2. Correct the line height in all browsers.
+ * 3. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
+ */
+/* Document
+   ========================================================================== */
+html {
+  font-family: sans-serif;
+  /* 1 */
+  line-height: 1.15;
+  /* 2 */
+  -ms-text-size-adjust: 100%;
+  /* 3 */
+  -webkit-text-size-adjust: 100%;
+  /* 3 */
+}
+
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+body {
+  margin: 0;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+figcaption,
+figure,
+main {
+  /* 1 */
+  display: block;
+}
+
+/**
+ * Add the correct margin in IE 8.
+ */
+figure {
+  margin: 1em 40px;
+}
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+a {
+  background-color: transparent;
+  /* 1 */
+  -webkit-text-decoration-skip: objects;
+  /* 2 */
+}
+
+/**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+a:active,
+a:hover {
+  outline-width: 0;
+}
+
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+  /* 2 */
+}
+
+/**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+b,
+strong {
+  font-weight: inherit;
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+audio,
+video {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+img {
+  border-style: none;
+}
+
+/**
+ * Hide the overflow in IE.
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: sans-serif;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: 1.15;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  display: inline-block;
+  /* 1 */
+  vertical-align: baseline;
+  /* 2 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+details,
+menu {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+}
+
+/* Scripting
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+canvas {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in IE.
+ */
+template {
+  display: none;
+}
+
+/* Hidden
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10-.
+ */
+[hidden] {
+  display: none;
+}
+
+/* Setting abstracted libraries */
+/* Internal libraries */
+{% comment %}
+  Calculate color based on lightness of color layout background color and black and white colors
+{% endcomment %}
+{% assign background_lightness = settings.color_layout_site_background | color_extract: 'lightness' %}
+{% if background_lightness >= 50 %}
+  {% assign color_layout_site_background_border_mix = '#000000' %}
+{% else %}
+  {% assign color_layout_site_background_border_mix = '#FFFFFF' %}
+{% endif %}
+
+{% assign color_border = settings.color_layout_site_background | color_mix: color_layout_site_background_border_mix, 50 %}
+
+{% assign morph_color = settings.color_products_vendor_name %}
+{% capture color_morph_products_vendor_name %}{% comment %}morph{% endcomment %}
+{% comment %}
+  This adjusts the color to give it an appropriate difference from the original color.
+  It is usually used for link hover color, and things where we need to distinguish a change.
+
+  @param morph_color {Color}
+    The origin color to morph
+
+  @param morph_adjustment {Number}
+    The number to multiply the lightness and saturation by. Default 2.
+{% endcomment %}
+
+{% if morph_adjustment == blank %}
+  {% assign morph_adjustment = 2 %}
+{% endif %}
+
+{% assign color_lightness = morph_color | color_extract: 'lightness' %}
+
+{% if color_lightness > 20 %}
+  {% if color_lightness > 50 %}
+    {% assign light_adjustment = color_lightness | divided_by: 25.0 | times: morph_adjustment %}
+  {% else %}
+    {% assign light_adjustment = color_lightness | divided_by: 15.0 | times: morph_adjustment %}
+  {% endif %}
+  {% assign new_color = morph_color | color_darken: light_adjustment %}
+{% else %}
+  {% if color_lightness < 7 %}
+    {% assign light_adjustment = 3 | times: morph_adjustment %}
+    {% assign new_color = morph_color | color_desaturate: 45 %}
+  {% elsif color_lightness < 12 %}
+    {% assign light_adjustment = 2.25 | times: morph_adjustment %}
+    {% assign new_color = morph_color | color_desaturate: 15 %}
+  {% else %}
+    {% assign light_adjustment = 1.75 | times: morph_adjustment %}
+    {% assign new_color = morph_color %}
+  {% endif %}
+  {% assign new_color = new_color | color_lighten: light_adjustment %}
+{% endif %}
+
+{{ new_color }}
+
+{% assign morph_adjustment = blank %}{% endcapture %}
+{% assign morph_color = settings.color_forms_input_border %}
+{% capture color_morph_forms_input_border %}{% comment %}morph{% endcomment %}
+{% comment %}
+  This adjusts the color to give it an appropriate difference from the original color.
+  It is usually used for link hover color, and things where we need to distinguish a change.
+
+  @param morph_color {Color}
+    The origin color to morph
+
+  @param morph_adjustment {Number}
+    The number to multiply the lightness and saturation by. Default 2.
+{% endcomment %}
+
+{% if morph_adjustment == blank %}
+  {% assign morph_adjustment = 2 %}
+{% endif %}
+
+{% assign color_lightness = morph_color | color_extract: 'lightness' %}
+
+{% if color_lightness > 20 %}
+  {% if color_lightness > 50 %}
+    {% assign light_adjustment = color_lightness | divided_by: 25.0 | times: morph_adjustment %}
+  {% else %}
+    {% assign light_adjustment = color_lightness | divided_by: 15.0 | times: morph_adjustment %}
+  {% endif %}
+  {% assign new_color = morph_color | color_darken: light_adjustment %}
+{% else %}
+  {% if color_lightness < 7 %}
+    {% assign light_adjustment = 3 | times: morph_adjustment %}
+    {% assign new_color = morph_color | color_desaturate: 45 %}
+  {% elsif color_lightness < 12 %}
+    {% assign light_adjustment = 2.25 | times: morph_adjustment %}
+    {% assign new_color = morph_color | color_desaturate: 15 %}
+  {% else %}
+    {% assign light_adjustment = 1.75 | times: morph_adjustment %}
+    {% assign new_color = morph_color %}
+  {% endif %}
+  {% assign new_color = new_color | color_lighten: light_adjustment %}
+{% endif %}
+
+{{ new_color }}
+
+{% assign morph_adjustment = blank %}{% endcapture %}
+
+{% assign color_site_overlays_opacity = settings.color_site_overlays_opacity | divided_by: '100.00' %}
+
+{% assign color_header_search_bar_border_extract_alpha = settings.color_header_search_bar_border | color_extract: 'alpha' %}
+{% assign color_forms_input_border_extract_alpha = settings.color_forms_input_border | color_extract: 'alpha' %}
+* {% assign color_header_background = settings.color_header_background %}
+ * {% assign chb_extract_alpha = color_header_background | color_extract: 'alpha' %}
+ * {% assign chb_extract_red = color_header_background | color_extract: 'red' %}
+ * {% assign chb_extract_green = color_header_background | color_extract: 'green' %}
+ * {% assign chb_extract_blue = color_header_background | color_extract: 'blue' %}
+ * {% assign chb_extract_total = chb_extract_alpha | plus: chb_extract_red | plus: chb_extract_green | plus: chb_extract_blue %}
+ * {% if chb_extract_total == 0 %}
+ *   {% assign color_header_background = "rgba(255,255,255,1)" %}
+ * {% endif %}
+h1, h2, h3, h4, h5, h6 {
+  font-family: {{ fonts_type_heading_family }};
+  font-style: {{ fonts_type_heading_style }};
+  font-weight: {{ fonts_type_heading_weight }};
+  letter-spacing: {{ settings.type_heading_spacing | divided_by: 100.0 | append: 'em' }};
+}
+
+{%- if settings.type_heading_capitalize -%}
+
+h1, h2, h3, h4, h5, h6 {
+    text-transform: uppercase;
+  }
+
+{%- else -%}
+
+h1, h2, h3, h4, h5, h6 {
+    text-transform: none;
+  }
+
+{%- endif -%}
+
+h1 b, h2 b, h3 b, h4 b, h5 b, h6 b,
+h1 strong,
+h2 strong,
+h3 strong,
+h4 strong,
+h5 strong,
+h6 strong {
+  font-weight: {{ fonts_type_heading_weight_bolder }};
+}
+
+h1 em, h2 em, h3 em, h4 em, h5 em, h6 em {
+  font-style: {{ fonts_type_heading_style_italic }};
+}
+
+h1 b em, h2 b em, h3 b em, h4 b em, h5 b em, h6 b em,
+h1 strong em,
+h2 strong em,
+h3 strong em,
+h4 strong em,
+h5 strong em,
+h6 strong em,
+h1 em b,
+h2 em b,
+h3 em b,
+h4 em b,
+h5 em b,
+h6 em b,
+h1 em strong,
+h2 em strong,
+h3 em strong,
+h4 em strong,
+h5 em strong,
+h6 em strong {
+  font-style: {{ fonts_type_heading_style_italic }};
+}
+
+h1 {
+  font-size: var(--font-size-heading-1);
+}
+
+h2 {
+  font-size: var(--font-size-heading-2);
+}
+
+h3 {
+  font-size: var(--font-size-heading-3);
+}
+
+h4 {
+  font-size: var(--font-size-heading-4);
+}
+
+h5 {
+  font-size: var(--font-size-heading-5);
+}
+
+h6 {
+  font-size: var(--font-size-heading-6);
+}
+
+{%- if settings.type_menu_capitalize -%}
+
+{%- else -%}
+
+{%- endif -%}
+
+.button-primary, .button-secondary {
+  font-size: var(--font-size-button-small);
+  padding: 0.6875rem 1.375rem;
+  letter-spacing: {{ settings.type_button_spacing | divided_by: 100.0 | append: 'em' }};
+  font-family: {{ fonts_type_button_family }};
+  font-style: {{ fonts_type_button_style }};
+  font-weight: {{ fonts_type_button_weight }};
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: {{ settings.button_border_radius | append: 'px' }};
+  transition: border-color 0.2s ease, background-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+{%- if settings.type_button_capitalize -%}
+
+.button-primary, .button-secondary {
+    text-transform: uppercase;
+  }
+
+{%- else -%}
+
+.button-primary, .button-secondary {
+    text-transform: none;
+  }
+
+{%- endif -%}
+
+.disabled.button-primary, .disabled.button-secondary, .disabled.button-primary:active, .disabled.button-secondary:active, .disabled.button-primary:focus, .disabled.button-secondary:focus {
+  color: #696969;
+  cursor: default;
+  background-color: #ebebeb;
+  border: 1px solid #ebebeb;
+}
+
+.button-primary {
+  color: {{ settings.color_buttons_primary_button_text }};
+  background-color: {{ settings.color_buttons_primary_button_background }};
+  border: 1px solid {{ settings.color_buttons_primary_button_background }};
+}
+
+.button-primary:not(.disabled):hover {
+  background: {{ settings.color_buttons_primary_button_background_hover }};
+  border: 1px solid {{ settings.color_buttons_primary_button_background_hover }};
+}
+
+.button-primary:active, .button-primary:focus {
+  background: {{ settings.color_buttons_primary_button_background_hover }};
+  border: 1px solid {{ settings.color_buttons_primary_button_background_hover }};
+}
+
+.button-secondary {
+  color: {{ settings.color_buttons_secondary_button_text }};
+  background-color: {{ settings.color_buttons_secondary_button_background }};
+  border: 1px solid {{ settings.color_buttons_secondary_button_border }};
+}
+
+.button-secondary:not(.disabled):hover {
+  color: {{ settings.color_buttons_secondary_button_text_hover }};
+  background: {{ settings.color_buttons_secondary_button_background_hover }};
+  border: 1px solid {{ settings.color_buttons_secondary_button_border_hover }};
+}
+
+.button-secondary:active, .button-secondary:focus {
+  background: {{ settings.color_buttons_secondary_button_background_hover }};
+  border: 1px solid {{ settings.color_buttons_secondary_button_border_hover }};
+}
+
+.giftcard--container {
+  max-width: {{ settings.layout_max_width | append: 'px' }};
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media screen and (max-width: 1079px) and (min-width: 720px) {
+  .giftcard--container {
+    padding-right: {{ settings.type_size_base | times: 1.75 | divided_by: 16.0 | append: 'rem' }};
+    padding-left: {{ settings.type_size_base | times: 1.75 | divided_by: 16.0 | append: 'rem' }};
+  }
+}
+
+@media screen and (min-width: 1080px) {
+  .giftcard--container {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+
+.button-icon, .button-signpost .signpost-icon {
+  display: inline-block;
+  margin-left: 0.3125rem;
+  vertical-align: middle;
+}
+
+.button-icon svg, .button-signpost .signpost-icon svg {
+  display: block;
+  margin-top: -0.125rem;
+  transform: rotate(-90deg);
+}
+
+.giftcard-message.message--error, .giftcard-message {
+  font-style: {{ fonts_type_body_style }};
+  font-weight: {{ fonts_type_body_weight_bolder }};
+  font-size: var(--font-size-body);
+  letter-spacing: {{ settings.type_body_spacing | divided_by: 100.0 | append: 'em' }};
+}
+
+.giftcard-message.message--error a, .giftcard-message a {
+  color: currentColor;
+}
+
+.giftcard-message.message--error {
+  color: #f05d5d;
+  background-color: {{ '#f05d5d' | color_mix: settings.color_layout_site_background, 18 }};
+}
+
+{%- if settings.type_button_capitalize -%}
+
+{%- else -%}
+
+{%- endif -%}
+
+.button-icon {
+  margin-left: 3px;
+}
+
+.button-icon svg {
+  width: calc(14px * {{ settings.type_button_sizing | divided_by: 100.0 }});
+  height: calc(14px * {{ settings.type_button_sizing | divided_by: 100.0 }});
+  margin-top: -0.1875rem;
+}
+
+.button-signpost {
+  font-family: {{ fonts_type_signpost_family }};
+  font-style: {{ fonts_type_signpost_style }};
+  font-weight: {{ fonts_type_signpost_weight }};
+  font-size: var(--font-size-button-signpost);
+  display: block;
+  padding: 0;
+  margin-top: {{ settings.type_size_base | times: 1.25 | divided_by: 16.0 | append: 'rem' }};
+  letter-spacing: 0;
+  text-decoration: none;
+  text-transform: none;
+}
+
+@media screen and (min-width: 860px) {
+  .button-signpost {
+    margin-top: {{ settings.type_size_base | times: 1.75 | divided_by: 16.0 | append: 'rem' }};
+  }
+}
+
+.button-signpost .signpost-icon {
+  margin-left: 2px;
+}
+
+.button-signpost .signpost-icon svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0;
+}
+
+#messageus_button {
+  z-index: 9999;
+}
+
+/* Global styles */
+html,
+body {
+  background-color: {{ settings.color_layout_site_background }};
+}
+
+html {
+  height: 100%;
+}
+
+html::before {
+  display: none;
+  content: "XS,S,M,L,L+,XL,XXL";
+}
+
+html::after {
+  display: none;
+  content: "XS";
+}
+
+@media screen and (min-width: 720px) {
+  html::after {
+    content: "S";
+  }
+}
+
+@media screen and (min-width: 860px) {
+  html::after {
+    content: "M";
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  html::after {
+    content: "L";
+  }
+}
+
+@media screen and (min-width: 1080px) {
+  html::after {
+    content: "L+";
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  html::after {
+    content: "XL";
+  }
+}
+
+{%- if settings.layout_max_width == 1200 -%}
+
+@media screen and (min-width: 1250px) {
+    html::after {
+      content: "XXL";
+    }
+  }
+
+{%- elsif settings.layout_max_width == 1300 -%}
+
+@media screen and (min-width: 1350px) {
+    html::after {
+      content: "XXL";
+    }
+  }
+
+{%- elsif settings.layout_max_width == 1400 -%}
+
+@media screen and (min-width: 1450px) {
+    html::after {
+      content: "XXL";
+    }
+  }
+
+{%- elsif settings.layout_max_width == 1500 -%}
+
+@media screen and (min-width: 1550px) {
+    html::after {
+      content: "XXL";
+    }
+  }
+
+{%- elsif settings.layout_max_width == 1600 -%}
+
+@media screen and (min-width: 1660px) {
+    html::after {
+      content: "XXL";
+    }
+  }
+
+{%- endif -%}
+
+body {
+  font-family: {{ fonts_type_body_family }};
+  font-style: {{ fonts_type_body_style }};
+  font-weight: {{ fonts_type_body_weight }};
+  font-size: var(--font-size-body);
+  width: 100%;
+  letter-spacing: {{ settings.type_body_spacing | divided_by: 100.0 | append: 'em' }};
+  color: {{ settings.color_text_regular_text }};
+}
+
+{%- if settings.font_family_override -%}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-sans, Ubuntu, Cantarell, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+
+{%- endif -%}
+
+@media screen and (max-width: 719px) {
+  body {
+    font-size: var(--font-size-body-small);
+  }
+}
+
+body.scroll-lock {
+  height: 100vh;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+th,
+b,
+strong {
+  letter-spacing: {{ settings.type_body_spacing | divided_by: 100.0 | append: 'em' }};
+}
+
+{%- if settings.type_body_custom == blank and settings.type_body_enable_bold -%}
+
+th,
+  b,
+  strong {
+    font-family: {{ fonts_type_body_bold_family }};
+    font-style: {{ fonts_type_body_bold_style }};
+    font-weight: {{ fonts_type_body_bold_weight }};
+  }
+
+{%- else -%}
+
+th,
+  b,
+  strong {
+    font-family: {{ fonts_type_body_family }};
+    font-style: {{ fonts_type_body_style }};
+    font-weight: {{ fonts_type_body_weight }};
+  }
+
+{%- endif -%}
+
+em {
+  font-style: {{ fonts_type_body_style_italic }};
+}
+
+th em,
+b em,
+strong em,
+em b,
+em strong {
+  letter-spacing: {{ settings.type_body_spacing | divided_by: 100.0 | append: 'em' }};
+}
+
+{%- if settings.type_body_custom == blank and settings.type_body_enable_bold -%}
+
+th em,
+  b em,
+  strong em,
+  em b,
+  em strong {
+    font-family: {{ fonts_type_body_bold_family }};
+    font-style: {{ fonts_type_body_bold_style_italic }};
+    font-weight: {{ fonts_type_body_bold_weight }};
+  }
+
+{%- else -%}
+
+th em,
+  b em,
+  strong em,
+  em b,
+  em strong {
+    font-family: {{ fonts_type_body_family }};
+    font-style: {{ fonts_type_body_style_italic }};
+    font-weight: {{ fonts_type_body_weight }};
+  }
+
+{%- endif -%}
+
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  border: 0;
+}
+
+.skip-to-main {
+  font-size: var(--font-size-body);
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  color: {{ settings.color_text_links }};
+  background: {{ settings.color_layout_site_background }};
+  text-decoration: none;
+  padding: 1em;
+}
+
+.skip-to-main:focus, .skip-to-main:active {
+  left: 0;
+  z-index: 702;
+}
+
+/*================ #Giftcard Template ================*/
+.giftcard__apple-wallet-image {
+  display: block;
+  margin: 0 auto;
+}
+
+/*================ Print Giftcard Styles ================*/
+@media print {
+  @page {
+    margin: 0.5cm;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  .giftcard__print-link,
+  .giftcard__apple-wallet {
+    display: none;
+  }
+}
+
+/*================ Custom Giftcard Styles ================*/
+.giftcard-header {
+  padding: {{ settings.type_size_base | divided_by: 16.0 | append: 'rem' }} {{ settings.type_size_base | times: 1.75 | divided_by: 16.0 | append: 'rem' }};
+  background-color: {{ color_header_background }};
+  text-align: center;
+}
+
+.giftcard-header-logo {
+  display: inline-block;
+  color: currentColor;
+  text-decoration: none;
+}
+
+.giftcard-header-logo-text {
+  font-size: var(--font-size-body);
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.giftcard--container {
+  max-width: 488px;
+  margin-bottom: {{ settings.type_size_base | times: 4.25 | divided_by: 16.0 | append: 'rem' }};
+  text-align: center;
+}
+
+.giftcard-title {
+  margin-top: {{ settings.type_size_base | times: 2 | divided_by: 16.0 | append: 'rem' }};
+  margin-bottom: {{ settings.type_size_base | times: 2 | divided_by: 16.0 | append: 'rem' }};
+}
+
+.giftcard-qr {
+  width: 120px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.giftcard-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: {{ settings.type_size_base | times: 1.25 | divided_by: 16.0 | append: 'rem' }};
+}
+
+.giftcard-actions .button-secondary {
+  margin-left: 20px;
+}
+
+/*================ Gift Card image ================*/
+.giftcard-image {
+  position: relative;
+  text-align: center;
+}
+
+.giftcard-image img {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.giftcard-image::before, .giftcard-image::after {
+  content: '';
+  position: absolute;
+  width: 47px;
+  height: 47px;
+  z-index: 3;
+}
+
+.giftcard-image::before {
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDdweCIgaGVpZ2h0PSI0N3B4IiB2aWV3Qm94PSIwIDAgNDcgNDciIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDQ3IDQ3IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBvcGFjaXR5PSIwLjEiPgoJCTxwYXRoIGQ9Ik00NC41ODYsMUwxLDQ0LjU4NlYxMGMwLTQuOTYzLDQuMDM3LTksOS05SDQ0LjU4NiBNNDcsMEgxMEM0LjQ3NywwLDAsNC40NzcsMCwxMHYzN0w0NywwTDQ3LDB6Ii8+Cgk8L2c+CjwvZz4KPGc+Cgk8Zz4KCQk8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNNDQuNTg2LDFMMSw0NC41ODZWMTBjMC00Ljk2Myw0LjAzNy05LDktOUg0NC41ODYiLz4KCTwvZz4KPC9nPgo8L3N2Zz4K") 0 0 no-repeat;
+  top: -1px;
+  left: -1px;
+}
+
+.giftcard-image::after {
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDdweCIgaGVpZ2h0PSI0N3B4IiB2aWV3Qm94PSIwIDAgNDcgNDciIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDQ3IDQ3IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBvcGFjaXR5PSIwLjEiPgoJCTxwYXRoIGQ9Ik0yLjQxNCw0Nkw0NiwyLjQxNFYzN2MwLDQuOTYzLTQuMDM3LDktOSw5SDIuNDE0IE0wLDQ3aDM3YzUuNTIzLDAsMTAtNC40NzcsMTAtMTBWMEwwLDQ3TDAsNDd6Ii8+Cgk8L2c+CjwvZz4KPGc+Cgk8Zz4KCQk8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMi40MTQsNDZMNDYsMi40MTRWMzdjMCw0Ljk2My00LjAzNyw5LTksOUgyLjQxNCIvPgoJPC9nPgo8L2c+Cjwvc3ZnPgo=") 0 0 no-repeat;
+  bottom: -1px;
+  right: -1px;
+}
+
+/*================ Gift card code ================*/
+.giftcard-code {
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  width: 100%;
+  z-index: 5;
+}
+
+.giftcard-code--medium {
+  font-size: 0.875em;
+}
+
+.giftcard-code--small {
+  font-size: 0.75em;
+}
+
+.giftcard-code--inner {
+  display: inline-block;
+  max-width: 450px;
+  padding: 0.5em;
+  vertical-align: baseline;
+  border-radius: 4px;
+}
+
+.giftcard-code-text {
+  font-style: {{ fonts_type_body_style }};
+  font-weight: {{ fonts_type_body_weight }};
+  display: inline-block;
+  padding: 0.4em 0.5em;
+  font-size: 1.875em;
+  line-height: 1;
+  letter-spacing: {{ settings.type_body_spacing | divided_by: 100.0 | append: 'em' }};
+  text-transform: uppercase;
+  vertical-align: baseline;
+  background-color: #fff;
+  border: 1px dashed {{ color_border }};
+}
+
+.giftcard-code-text.disabled {
+  text-decoration: line-through;
+}
+
+/*================ Gift card amount ================*/
+.giftcard-amount {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2.75em;
+  line-height: 1.2;
+  padding: 10px;
+  z-index: 5;
+  color: #fff;
+}
+
+.giftcard-amount strong {
+  display: block;
+}
+
+/*================ Tooltip ================*/
+.giftcard-tooltip {
+  display: block;
+  position: absolute;
+  top: -50%;
+  right: 50%;
+  margin-top: 16px;
+  z-index: 4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.giftcard-tooltip::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  margin-bottom: -5px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 5px solid #fff;
+}
+
+.giftcard-tooltip-label {
+  font-style: {{ fonts_type_body_style }};
+  font-weight: {{ fonts_type_body_weight }};
+  position: relative;
+  right: -50%;
+  display: block;
+  min-height: 14px;
+  padding: 0.5em 0.75em;
+  margin-left: 0.25em;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: {{ settings.type_body_spacing | divided_by: 100.0 | append: 'em' }};
+  text-decoration: none;
+  text-shadow: none;
+  background-color: #fff;
+  border: 0;
+  border-radius: 4px;
+}
+
+.giftcard-tooltip-label small {
+  font-size: 0.875em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/*================ Medium-down width ================*/
+@media screen and (max-width: 580px) {
+  .print-link {
+    display: none;
+  }
+}
+
+/*================ Small width ================*/
+@media screen and (max-width: 400px) {
+  .giftcard-image::before, .giftcard-image::after {
+    display: none;
+  }
+  .giftcard-code {
+    font-size: 0.75em;
+  }
+  .giftcard-code--medium {
+    font-size: 0.65em;
+  }
+  .giftcard-code--small {
+    font-size: 0.55em;
+  }
+}
+
+/*============================================================================
+  #Print Styles
+==============================================================================*/
+@media print {
+  .giftcard-image::before,
+  .giftcard-image::after,
+  .giftcard-tooltip {
+    display: none;
+  }
+  .giftcard-actions {
+    display: none;
+  }
+}

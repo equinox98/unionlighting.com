@@ -1,0 +1,108 @@
+/*********************** Custom CSS for Boost Filter & Search  ************************/
+
+
+
+
+/**************************** Place your custom css below  ****************************/
+/* Filter Tree */
+.boost-pfs-filter-tree a, .boost-pfs-filter-tree span, .boost-pfs-filter-tree .boost-pfs-filter-clear, .boost-pfs-filter-tree .boost-pfs-filter-clear-all, .boost-pfs-filter-tree2 a, .boost-pfs-filter-tree2 span, .boost-pfs-filter-tree2 .boost-pfs-filter-clear, .boost-pfs-filter-tree2 .boost-pfs-filter-clear-all {
+  color: black;
+  text-decoration: none !important;
+}
+.boost-pfs-filter-tree .boost-pfs-filter-option-box .boost-pfs-filter-option-item:not(.selected):not(:hover) a, .boost-pfs-filter-tree .boost-pfs-filter-option-box .boost-pfs-filter-option-item:not(.selected):not(:hover) span, .boost-pfs-filter-tree2 .boost-pfs-filter-option-box .boost-pfs-filter-option-item:not(.selected):not(:hover) a, .boost-pfs-filter-tree2 .boost-pfs-filter-option-box .boost-pfs-filter-option-item:not(.selected):not(:hover) span {
+  color: black;
+}
+.boost-pfs-filter-tree .boost-pfs-filter-option-box .boost-pfs-filter-option-item.selected a, .boost-pfs-filter-tree .boost-pfs-filter-option-box .boost-pfs-filter-option-item.selected span, .boost-pfs-filter-tree .boost-pfs-filter-option-box .boost-pfs-filter-option-item:hover a, .boost-pfs-filter-tree .boost-pfs-filter-option-box .boost-pfs-filter-option-item:hover span, .boost-pfs-filter-tree2 .boost-pfs-filter-option-box .boost-pfs-filter-option-item.selected a, .boost-pfs-filter-tree2 .boost-pfs-filter-option-box .boost-pfs-filter-option-item.selected span, .boost-pfs-filter-tree2 .boost-pfs-filter-option-box .boost-pfs-filter-option-item:hover a, .boost-pfs-filter-tree2 .boost-pfs-filter-option-box .boost-pfs-filter-option-item:hover span {
+  color: white !important;
+}
+
+.boost-pfs-filter-tree .boost-pfs-filter-option-block .boost-pfs-filter-block-title h3 {
+  font-size: 16.8833px;
+  font-style: normal;
+  font-weight: 600;
+  text-transform: none !important;
+}
+
+.boost-pfs-filter-tree-mobile button {
+  text-transform: none !important;
+}
+
+@media screen and (min-width: 860px) {
+  .utils-sortby-select {
+    display: inline-block;
+  }
+}
+@media screen and (max-width: 859px) {
+  .boost-pfs-filter-tree-mobile {
+    display: block;
+  }
+
+  .utils-sortby-select {
+    display: flex;
+  }
+}
+.utils-showby-item.active {
+  font-weight: 600;
+}
+
+/* Search */
+.search-template .productgrid--sidebar {
+  padding-top: 1.75rem;
+}
+
+.live-search--active .search-flydown {
+  display: none;
+}
+
+.boost-pfs-search-suggestion-item a {
+  color: black;
+}
+
+/* Pagination */
+.bc-pagination--item {
+  display: inline-block;
+  padding: 0.5625rem 0.6875rem;
+}
+
+/* Product grid */
+.productgrid-listview .boost-pfs-filter-products li[data-product-item] {
+  overflow: hidden !important;
+}
+
+#shopify-section-static-collection .product-recently-viewed-wrapper .productitem--actions {
+  display: none;
+}
+
+.boost-pfs-filter-tree-open-body .site-header-wrapper {
+  z-index: 0;
+  position: relative;
+}
+
+/**** Custom Search result toolbar ****/
+.boost-pfs-search-result-toolbar {
+  display: flex;
+  align-items: center;
+  margin: 35px 0;
+  border-top: 1px solid #a1a6a4;
+  border-bottom: 1px solid #a1a6a4;
+  white-space: nowrap;
+}
+.boost-pfs-search-result-toolbar .boost-pfs-search-result-item:first-child {
+  flex: auto;
+}
+.boost-pfs-search-result-toolbar .boost-pfs-search-result-panel-controls {
+  padding: 20px 0;
+  margin: 0;
+}
+.boost-pfs-search-result-toolbar button {
+  cursor: pointer;
+}
+@media (max-width: 767px) {
+  .boost-pfs-search-result-toolbar .boost-pfs-search-total-result {
+    display: none;
+  }
+}
+
+.boost-pfs-search-result-list-item-image img {
+  max-width: 100%;
+}
