@@ -730,7 +730,7 @@
           "mobile_logo": "shopify:\/\/shop_images\/Union_Luminaires_Decor_Logo.png",
           "mobile_logo_height": 50,
           "mobile_logo_position": "center",
-          "border_enabled": true,
+          "border_enabled": false,
           "border_width": 1,
           "border_color": "#000000",
           "enable_live_search": false,
