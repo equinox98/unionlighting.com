@@ -1,0 +1,93 @@
+{% comment %}
+  @param social_url {String}
+    URL to share
+
+  @param social_title {Object}
+    If sending data to a service, description or title to share
+
+  @param social_image {String|Boolean}
+    If sending data to a service, URL of image to share, or false for no image
+{% endcomment %}
+
+{% assign share_url = social_url | url_param_escape %}
+{% assign share_title = social_title | url_param_escape %}
+{% assign share_image = false %}
+{% if social_image %}
+  {% assign share_image = social_image | url_param_escape %}
+{% endif %}
+
+<aside class="share-buttons share-buttons-{{ settings.color_social_icons_social_sharing_icon_style }}" aria-label="{{ snippet_title | t }}">
+
+  <span class="share-buttons--title">
+    {{ snippet_title | t }}
+  </span>
+
+  <div class="share-buttons--list">
+    <a
+      class="share-buttons--button share-buttons--facebook"
+      target="_blank"
+      href="//www.facebook.com/sharer.php?u={{ share_url }}">
+      {%-
+        include 'social-icon',
+        id: 'facebook'
+      -%}
+      <span class="visually-hidden">{{ 'general.accessibility.share_on_facebook' | t }}</span>
+    </a>
+
+    <a
+      class="share-buttons--button share-buttons--twitter"
+      target="_blank"
+      href="//twitter.com/share?url={{ share_url }}">
+      {%-
+        include 'social-icon',
+        id: 'twitter'
+      -%}
+      <span class="visually-hidden">{{ 'general.accessibility.share_on_twitter' | t }}</span>
+    </a>
+
+    <a
+      class="share-buttons--button share-buttons--linkedin"
+      target="_blank"
+      href="//www.linkedin.com/shareArticle?mini=true&url={{ share_url }}&title={{ share_title }}">
+      {%-
+        include 'social-icon',
+        id: 'linkedin'
+      -%}
+      <span class="visually-hidden">{{ 'general.accessibility.share_on_linkedin' | t }}</span>
+    </a>
+    
+    
+    <!--custom email button-->
+    <a
+      class="share-buttons--button share-buttons--linkedin"
+      target="_blank"
+      href="mailto:?body={{ share_url }}&subject={{ share_title }}">
+<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="28" viewBox="-1 -1 30 30" style="enable-background:new 0 0 28 28;" xml:space="preserve">
+<g>
+	<path d="M15.5,14.4L22,7.8c-0.4-0.2-0.9-0.3-1.5-0.3h-13C6.9,7.5,6.4,7.6,6,7.8l6.6,6.6C13.5,15.4,14.5,15.4,15.5,14.4z"/>
+	<path d="M22.8,8.6L17.3,14l5.4,5.4c0.2-0.4,0.3-0.9,0.3-1.5v-7.8C23.1,9.5,23,9,22.8,8.6z"/>
+	<path d="M16.2,15.1c-0.7,0.7-1.4,1.1-2.2,1.1c-0.8,0-1.5-0.4-2.2-1.1l-0.4-0.4L6,20.2c0.4,0.2,0.9,0.3,1.5,0.3h13
+		c0.6,0,1.1-0.1,1.5-0.3l-5.4-5.4L16.2,15.1z"/>
+	<path d="M5.2,8.6C5,9,4.9,9.5,4.9,10.1v7.8c0,0.6,0.1,1.1,0.3,1.5l5.4-5.4L5.2,8.6z"/>
+</g>
+</svg>
+
+      <span class="visually-hidden">Share by Email</span>
+    </a>
+    
+    
+
+    {% if share_image %}
+      <a
+        class="share-buttons--button share-buttons--pinterest"
+        target="_blank"
+        href="//pinterest.com/pin/create/button/?url={{ share_url }}&amp;media={{ share_image }}&amp;description={{ share_title }}">
+        {%-
+          include 'social-icon',
+          id: 'pinterest'
+        -%}
+        <span class="visually-hidden">{{ 'general.accessibility.share_on_pinterest' | t }}</span>
+      </a>
+    {% endif %}
+  </div>
+</aside>
