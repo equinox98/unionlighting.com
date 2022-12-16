@@ -1,0 +1,14 @@
+{% render 'preorder-now-collection-item', product: product %}
+        {% render 'shogun-products', content: product %}
+{{product.metafields.shogun.above}}
+{% section 'static-product' %}
+<div id="globoRelatedProducts"></div>
+{% section 'static-product-recommendations' %}
+{% section 'static-product-reviews' %}
+{% section 'static-recently-viewed' %}
+{% section 'static-product-promo-grid' %}
+
+
+
+{{product.metafields.shogun.below}}
+

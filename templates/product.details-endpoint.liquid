@@ -1,0 +1,84 @@
+{% comment %} Please don’t update this content {% endcomment %}
+
+{% layout none %}
+{
+  "product":
+    {
+      "id":{{ product.id }},
+      "metafields":[
+        
+              {% comment %}
+                Variant Metafield
+              {% endcomment %}
+              {% assign l_variants = product.variants %}
+              {% for v_variant in l_variants %}
+                {
+                  "namespace": {{ v_variant.id }},
+                  "key": "manucode",
+                  "value": {{ v_variant.metafields.specs["manucode"] | json }}
+                },
+              {% endfor %}
+        
+              {% comment %}
+                Variant Metafield
+              {% endcomment %}
+              {% assign l_variants = product.variants %}
+              {% for v_variant in l_variants %}
+                {
+                  "namespace": {{ v_variant.id }},
+                  "key": "finish",
+                  "value": {{ v_variant.metafields.specs["finish"] | json }}
+                },
+              {% endfor %}
+        
+              {% comment %}
+                Variant Metafield
+              {% endcomment %}
+              {% assign l_variants = product.variants %}
+              {% for v_variant in l_variants %}
+                {
+                  "namespace": {{ v_variant.id }},
+                  "key": "material",
+                  "value": {{ v_variant.metafields.specs["material"] | json }}
+                },
+              {% endfor %}
+        
+              {% comment %}
+                Single Metafield
+              {% endcomment %}
+              {% assign v_catalognumber = product.metafields.specs["catalognumber"] %}
+              {% if v_catalognumber != blank %}
+                {
+                  "namespace": "specs",
+                  "key": "catalognumber",
+                  "value": {{ v_catalognumber | json }}
+                },
+              {% endif %}
+        
+              {% comment %}
+                Variant Metafield
+              {% endcomment %}
+              {% assign l_variants = product.variants %}
+              {% for v_variant in l_variants %}
+                {
+                  "namespace": {{ v_variant.id }},
+                  "key": "catalognumber",
+                  "value": {{ v_variant.metafields.specs["catalognumber"] | json }}
+                },
+              {% endfor %}
+        
+              {% comment %}
+                Variant Metafield
+              {% endcomment %}
+              {% assign l_variants = product.variants %}
+              {% for v_variant in l_variants %}
+                {
+                  "namespace": {{ v_variant.id }},
+                  "key": "unionsku",
+                  "value": {{ v_variant.metafields.specs["unionsku"] | json }}
+                },
+              {% endfor %}
+        
+      ]
+    }
+}

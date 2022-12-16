@@ -1,0 +1,200 @@
+<div id="shopify-section-static-collection" class="shopify-section search--section">
+
+	<script
+		type="application/json"
+		data-section-type="static-collection"
+		data-section-id="static-collection"
+		data-section-data
+	>
+		{
+			"context": {
+				"see_more": {{ 'general.general.see_more' | t | json }},
+				"see_less": {{ 'general.general.see_less' | t | json }}
+			}
+			{% if settings.product_enable_recently_viewed_products %}
+				,
+				"time": {
+					"second": {{ 'general.time.second' | t | json }},
+					"seconds": {{ 'general.time.seconds' | t | json }},
+					"minute": {{ 'general.time.minute' | t | json }},
+					"minutes": {{ 'general.time.minutes' | t | json }},
+					"hour": {{ 'general.time.hour' | t | json }},
+					"hours": {{ 'general.time.hours' | t | json }},
+					"ago": {{ 'general.time.ago' | t | json }}
+				},
+				"product_card_settings": {
+					"emphasize_price": "{{ settings.product_grid_emphasize_price }}",
+					"sale_badge": "{{ settings.product_sales_badge }}",
+					"sale_badge_style": "{{ settings.product_sales_badge_style }}"
+				}
+			{% endif %}
+		}
+	</script>
+
+	<div class="productgrid--outer layout--has-sidebar search-template">
+		<div class="productgrid--masthead">
+			{%
+				include 'breadcrumbs'
+			%}
+
+			{%
+				include 'page-search-form',
+				enable_content: true
+			%}
+		</div>
+
+		<div class="boost-pfs-search-result-toolbar">
+			<div class="boost-pfs-search-result-item">
+				<ul class="boost-pfs-search-result-panel-controls">
+					<li>{% include 'boost-pfs-filter-skeleton', width: 2 %}</li>
+					<li>{% include 'boost-pfs-filter-skeleton', width: 2 %}</li>
+					<li>{% include 'boost-pfs-filter-skeleton', width: 1 %}</li>
+				</ul>
+			</div>
+			<div class="boost-pfs-search-result-item">
+				<span class="boost-pfs-search-total-result">
+					{% include 'boost-pfs-filter-skeleton', width: 2 %}
+				</span>
+			</div>
+		</div>
+
+		<div class="productgrid--sidebar boost-pfs-search-panel-product-show">
+			<div class="productgrid--sidebar-section">
+				<div class="boost-pfs-filter-tree boost-pfs-filter-tree-v" data-is-desktop >
+				{% comment %} Include placeholder template {% endcomment %}
+				{% include 'boost-pfs-filter-skeleton', type: 'filter-tree'  %}
+				</div>
+			</div>
+		</div>
+
+		<div class="productgrid--wrapper boost-pfs-search-panel-product-show">
+			<div class="results--container" data-html="productgrid">
+				<nav class="productgrid--utils productgrid--utils--visible-mobile">
+				<div class="boost-pfs-filter-top-sorting productgrid--utils utils-sortby">{% include 'boost-pfs-filter-skeleton', width: 3 %}</div>
+				<div class="productgrid--utils utils-view">
+					<div class="utils-view-container">
+							<ul class="boost-pfs-filter-top-show-limit utils-showby">{% include 'boost-pfs-filter-skeleton', width: 2 %}</ul>
+							<div class="boost-pfs-filter-top-display-type utils-viewtoggle" data-display-type>
+								<span class="utils-viewtoggle-label">
+									{{ 'product_grid.view_as.title' | t }}
+								</span>
+
+								<button
+									class="utils-viewtoggle-button active"
+									data-display-type="grid-view"
+									aria-label="grid view"
+								>
+									{% include 'icon-library', id: 'icon-grid' %}
+								</button>
+								<button
+									class="utils-viewtoggle-button"
+									data-display-type="list-view"
+									aria-label="list view"
+								>
+									{% include 'icon-library', id: 'icon-list' %}
+								</button>
+							</div>
+					</div>
+				</div>
+				</nav>
+			
+				<div class="boost-pfs-filter-tree-mobile-button" >{% include 'boost-pfs-filter-skeleton', type: 'button' %}</div>
+				<div class="boost-pfs-filter-tree boost-pfs-filter-tree-v" data-is-mobile >
+				{% comment %} Include placeholder template {% endcomment %}
+				{% include 'boost-pfs-filter-skeleton', type: 'filter-tree'  %}
+				</div>
+			
+				<ul class="boost-pfs-filter-products productgrid--items productgrid--no-spacing">
+				{% comment %} Fix Shopify search term report {% endcomment %}
+				{% paginate search.results by 2 %}
+				{% if search.performed %}
+					{% for item in search.results %}
+						<li class="productgrid--items" style="display: none !important"></li>
+					{% endfor %}
+				{% endif %}
+				{% endpaginate %}
+				</ul>
+			
+				<div class="boost-pfs-filter-bottom-pagination"></div>
+				<div class="boost-pfs-filter-load-more"></div>
+			</div>  
+		</div>
+
+		<div class="boost-pfs-search-result-wrap boost-hidden">
+			<div class="boost-pfs-search-result-collections">
+				<div class="boost-pfs-search-result-list-item"><a href="#">{% include 'boost-pfs-filter-skeleton', width: 4 %}</a></div>
+				<div class="boost-pfs-search-result-list-item"><a href="#">{% include 'boost-pfs-filter-skeleton', width: 3 %}</a></div>
+				<div class="boost-pfs-search-result-list-item"><a href="#">{% include 'boost-pfs-filter-skeleton', width: 4 %}</a></div>
+			</div>
+			<div class="boost-pfs-search-result-collection-pagination">{% include 'boost-pfs-filter-skeleton', width: 4 %}</div>
+		</div>
+		<div class="boost-pfs-search-result-wrap boost-hidden">
+			<div class="boost-pfs-search-result-pages">
+				<div class="boost-pfs-search-result-list-item"><a href="#">{% include 'boost-pfs-filter-skeleton', width: 4 %}</a></div>
+				<div class="boost-pfs-search-result-list-item"><a href="#">{% include 'boost-pfs-filter-skeleton', width: 3 %}</a></div>
+				<div class="boost-pfs-search-result-list-item"><a href="#">{% include 'boost-pfs-filter-skeleton', width: 4 %}</a></div>
+			</div>
+			<div class="boost-pfs-search-result-page-pagination">{% include 'boost-pfs-filter-skeleton', width: 4 %}</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	// Declare boostPFSThemeConfig variable
+	var boostPFSThemeConfig = {
+		label: {
+			sorting: {{ 'product_grid.sort_by.title' | t | json }},
+			sorting_best_selling: {% assign temp = collection.sort_options[1].name %} {% unless temp == nil %} {{ temp | json }} {% else %} "Best Selling" {% endunless %},
+			sorting_featured: {% assign temp = collection.sort_options[0].name %} {% unless temp == nil %} {{ temp | json }} {% else %} "Featured" {% endunless %},
+			sorting_title_ascending: {% assign temp = collection.sort_options[2].name %} {% unless temp == nil %} {{ temp | json }} {% else %} "Alphabetically, A-Z" {% endunless %},
+			sorting_title_descending: {% assign temp = collection.sort_options[3].name %} {% unless temp == nil %} {{ temp | json }} {% else %} "Alphabetically, Z-A" {% endunless %},
+			sorting_price_ascending: {% assign temp = collection.sort_options[4].name %} {% unless temp == nil %} {{ temp | json }} {% else %} "Lowest Price" {% endunless %},
+			sorting_price_descending: {% assign temp = collection.sort_options[5].name %} {% unless temp == nil %} {{ temp | json }} {% else %} "Highest Price" {% endunless %},
+			sorting_date_ascending: {% assign temp = collection.sort_options[6].name %} {% unless temp == nil  %} {{ temp | json }} {% else %} "Date, Old to New" {% endunless %},
+			sorting_date_descending: {% assign temp = collection.sort_options[7].name %} {% unless temp == nil  %} {{ temp | json }} {% else %} "Date, New to Old" {% endunless %},
+			sorting_relevance: {% assign temp = 'collections.sorting.relevance' | t %} {% unless temp contains 'translation missing'  %} {{ temp | json }} {% else %} "Relevance" {% endunless %},
+			sale: {{ 'product.item.badges.sale' | t | json }},
+			sold_out: {{ 'product.item.badges.sold_out' | t | json }},  
+			prev: {{ 'general.pagination.prev' | t | json }},
+			next: {{ 'general.pagination.next' | t | json }},
+			show_per_page: {{ 'product_grid.show_per_page.title' | t | json }},
+			add_to_cart: {{ 'product.buttons.add_to_cart' | t | json }},
+			sold_out: {{ 'product.buttons.sold_out' | t | json }},
+			see_more: {{ 'general.general.see_more' | t | json }},
+			see_less: {{ 'general.general.see_less' | t | json }},
+			quick_look_text: {{ 'product.buttons.quick_shop' | t | json }},
+			quick_buy_text: {{ 'product.buttons.add_to_cart' | t | json }},
+			quick_choose_options: {{ 'product.buttons.choose_options' | t | json }},
+			sale_percentile_html: {{ 'product.item.badges.sale_percentile_html' | t | json }},
+			sale_money_html: {{ 'product.item.badges.sale_money_html' | t | json }},
+			range_html: {{ 'product.item.price.range_html' | t | json }},
+			view_details: {{ 'product.buttons.view_details' | t  | json }},
+			view_as_title: {{ 'product_grid.view_as.title' | t | json }},
+			swatches_count_one: {{ 'product.color_swatches.swatches_count.one' | t | json }},
+			swatches_count_other: {{ 'product.color_swatches.swatches_count.other' | t | json }},
+		},
+		custom: {
+			products_per_page: {% if paginate_by %} {{ paginate_by | json }} {% else %} 24 {% endif %},
+			pagination: {% if section.settings.pagination %} {{ section.settings.pagination | json }} {% else %} "traditional" {% endif %},
+			emphasize_price: {% if settings.product_grid_emphasize_price != nil %} {{ settings.product_grid_emphasize_price | json }} {% else %} true {% endif %},
+			enable_quick_look: {% if settings.product_grid_show_quickshop != nil %} {{ settings.product_grid_show_quickshop | json }} {% else %} false {% endif %},
+			enable_quick_buy: {% if settings.product_grid_show_atc != nil %} {{ settings.product_grid_show_atc | json }} {% else %} false {% endif %},
+			show_modal: {% if settings.product_grid_quick_shop != nil %} {{ settings.product_grid_quick_shop | json }} {% else %} true {% endif %},
+			product_grid_image_style: {% if settings.product_grid_image_style != nil %} {{ settings.product_grid_image_style | json }} {% else %} "natural" {% endif %},
+			product_ratings_reviews: {% if settings.product_ratings_reviews != nil %} {{ settings.product_ratings_reviews | json }} {% else %} true {% endif %},
+			product_sales_badge: {% if settings.product_sales_badge != nil %} {{ settings.product_sales_badge | json }} {% else %} true {% endif %},
+			product_sales_badge_style: {% if settings.product_sales_badge_style != nil %} {{ settings.product_sales_badge_style | json }} {% else %} "percentile" {% endif %},
+			product_grid_show_second_image:  {% if settings.product_grid_show_second_image != nil %} {{ settings.product_grid_show_second_image | json }} {% else %} false {% endif %},
+			show_vendor: {% if settings.product_show_vendor != nil %} {{ settings.product_show_vendor | json }} {% else %} false {% endif %},
+			show_by: {% if section.settings.show_by != nil %} {{ section.settings.show_by | json }} {% else %} true {% endif %},
+			quickshop_product_cart_redirect: {% if settings.quickshop_product_cart_redirect != nil %} {{ settings.quickshop_product_cart_redirect | json }} {% else %} false {% endif %},
+			swatches_enable: {% if settings.swatches_enable != nil %} {{ settings.swatches_enable | json }} {% else %} true {% endif %},
+			swatches_product_page_only: {% if settings.swatches_product_page_only != nil %} {{ settings.swatches_product_page_only | json }} {% else %} false {% endif %},
+			swatches_swatch_trigger: {% if settings.swatches_swatch_trigger %} {{ settings.swatches_swatch_trigger | json }} {% else %} "color" {% endif %},
+			swatches_shape: {% if settings.swatches_shape %} {{ settings.swatches_shape | json }} {% else %} "square" {% endif %},
+			swatches_product_card_hover: {% if settings.swatches_product_card_hover %} {{ settings.swatches_product_card_hover | json }} {% else %} "always" {% endif %},
+			swatches_custom_colors: {% if settings.swatches_custom_colors %} {{ settings.swatches_custom_colors | json }} {% else %} "" {% endif %},
+			money_format: {{ shop.money_format | json }},
+		}
+	};
+</script>
