@@ -1,9 +1,10 @@
 {% raw %}
+
 <script id="globoRelatedProductsTemplate" type="template/html">
   {% if box.template.id == 1 or box.template.id == '1' %}
   <div id="{{box.id}}" data-title="{{box.title.text | escape}}" class="ga ga-template_1 ga-products-box ga-template_themeid_0">
-    <h2 class="ga-title section-title">{{box.title.text}}</h2>
-    {% if box.subtitle %}<div class="ga-subtitle">{{box.subtitle.text}}</div>{% endif %}
+    {% if box.title and box.title.text and box.title.text != '' %}<h2 class="ga-title section-title "><span>{{box.title.text}}</span></h2>{% endif %}
+    {% if box.subtitle and box.subtitle.text and box.subtitle.text != '' %}<div class="ga-subtitle">{{box.subtitle.text}}</div>{% endif %}
     <div class="ga-products">
       <div class="ga-carousel_wrapper">
         <ul class="ga-carousel gowl-carousel" data-products-count="{{products.size}}">
@@ -26,9 +27,9 @@
               {% unless product.available %}
               <span class="ga-label ga-label_sold">{{translation.sold_out}}</span>
               {% endunless %}
-              <div class="ga-product_image ga-product_image_{{product.id}}" id="ga-product_image_{{product.id}}" style="background-image: url('{{featured_image}}')"></div>
+              <div class="ga-product_image ga-product_image_{{product.id}}" id="ga-product_image_{{product.id}}" style="background-image: url('{{featured_image}}')"><span></span></div>
             </a>
-            <a class="ga-product_title"{% if settings.new_tab %} target="_blank"{% endif %} href="/products/{{product.handle}}">{{product.title}}</a>
+                        <a class="ga-product_title  "{% if settings.new_tab %} target="_blank"{% endif %} href="/products/{{product.handle}}">{{product.title}}</a>
             {% assign variants_size = product.variants | size %}
             <div class="ga-product_variants-container{% unless box.template.elements contains 'variantSelector' %} ga-hide{% endunless %}">
               <select class="ga-product_variant_select {% if variants_size == 1 %}ga-hide{% endif %}">
@@ -37,9 +38,11 @@
                 {% endfor %}
               </select>
             </div>
+            {% if settings.setHideprice %}
+            {% else %}
             {% if box.template.elements contains 'price' %}
             <span class="ga-product_price-container">
-              <span class="ga-product_price money">{{first_available_variant.price | money}}</span>
+              <span class="ga-product_price money  {% if first_available_variant.compare_at_price > first_available_variant.price %} ga-product_have_oldprice {% endif %}">{{first_available_variant.price | money}}</span>
               {% if first_available_variant.compare_at_price > first_available_variant.price %}
               <s class="ga-product_oldprice money">{{first_available_variant.compare_at_price | money}}</s>
               {% endif %}
@@ -48,7 +51,8 @@
             {% if box.template.elements contains 'addToCartBtn' %}
             <button class="ga-product_addtocart" type="button" data-add="{{translation.add_to_cart}}" data-added="{{translation.added_to_cart}}">{{translation.add_to_cart}}</button>
             {% endif %}
-          </li>
+            {% endif %}
+                      </li>
           {% endfor %}
         </ul>
       </div>
@@ -56,8 +60,8 @@
   </div>
   {% elsif box.template.id == 2 or box.template.id == '2' %}
   <div id="{{box.id}}" data-title="{{box.title.text | escape}}" class="ga ga-template_2 ga-products-box  ga-template_themeid_0">
-    <h2 class="ga-title section-title">{{box.title.text}}</h2>
-    {% if box.subtitle %}<div class="ga-subtitle">{{box.subtitle.text}}</div>{% endif %}
+    {% if box.title and box.title.text and box.title.text != '' %}<h2 class="ga-title section-title "><span>{{box.title.text}}</span></h2>{% endif %}
+    {% if box.subtitle and box.subtitle.text and box.subtitle.text != '' %}<div class="ga-subtitle">{{box.subtitle.text}}</div>{% endif %}
     {% assign total_price = 0 %}
     <div class="ga-products">
       <div class="ga-products_image">
@@ -85,6 +89,8 @@
           </a>
         </div>
         {% endfor %}
+        {% if settings.setHideprice %}
+        {% else %}
         <div class="ga-product-form {% unless total_price > 0 %}ga-hide{% endunless %}">
           {% if box.template.elements contains 'price' %}
           <div>{{translation.total_price}} <span class="ga-product_price ga-product_totalprice money">{{total_price | money}}</span></div>
@@ -93,6 +99,7 @@
           <button class="ga-addalltocart" type="button" data-add="{{translation.add_selected_to_cart}}" data-added="{{translation.added_selected_to_cart}}">{{translation.add_selected_to_cart}}</button>
           {% endif %}
         </div>
+        {% endif %}
       </div>
     </div>
     <ul class="ga-products-input">
@@ -118,13 +125,16 @@
             {% endfor %}
           </select>
         </div>
+        {% if settings.setHideprice %}
+        {% else %}
         {% if box.template.elements contains 'price' %}
         <span class="ga-product_price-container">
-          <span class="ga-product_price money">{{first_available_variant.price | money}}</span>
+          <span class="ga-product_price money   {% if first_available_variant.compare_at_price > first_available_variant.price %} ga-product_have_oldprice {% endif %}">{{first_available_variant.price | money}}</span>
           {% if first_available_variant.compare_at_price > first_available_variant.price %}
           <s class="ga-product_oldprice money">{{first_available_variant.compare_at_price | money}}</s>
           {% endif %}
         </span>
+        {% endif %}
         {% endif %}
       </li>
       {% endfor %}
@@ -132,8 +142,8 @@
   </div>
   {% elsif box.template.id == 3 or box.template.id == '3' %}
   <div id="{{box.id}}" data-title="{{box.title.text | escape}}" class="ga ga-template_3 ga-products-box  ga-template_themeid_0">
-    <h2 class="ga-title section-title">{{box.title.text}}</h2>
-    {% if box.subtitle %}<div class="ga-subtitle">{{box.subtitle.text}}</div>{% endif %}
+    {% if box.title and box.title.text and box.title.text != '' %}<h2 class="ga-title section-title "><span>{{box.title.text}}</span></h2>{% endif %}
+    {% if box.subtitle and box.subtitle.text and box.subtitle.text != '' %}<div class="ga-subtitle">{{box.subtitle.text}}</div>{% endif %}
     {% assign total_price = 0 %}
     <div class="ga-products">
       <ul class="ga-products-table">
@@ -174,17 +184,22 @@
               {% endfor %}
             </select>
           </div>
+          {% if settings.setHideprice %}
+          {% else %}
           {% if box.template.elements contains 'price' %}
           <span class="ga-product_price-container">
-            <span class="ga-product_price money">{{first_available_variant.price | money}}</span>
+            <span class="ga-product_price money   {% if first_available_variant.compare_at_price > first_available_variant.price %} ga-product_have_oldprice {% endif %}">{{first_available_variant.price | money}}</span>
             {% if first_available_variant.compare_at_price > first_available_variant.price %}
             <s class="ga-product_oldprice money">{{first_available_variant.compare_at_price | money}}</s>
             {% endif %}
           </span>
           {% endif %}
+          {% endif %}
         </li>
         {% endfor %}
       </ul>
+      {% if settings.setHideprice %}
+      {% else %}
       <div class="ga-product-form{% unless box.template.selected or total_price > 0 %} ga-hide{% endunless %}">
         {% if box.template.elements contains 'price' %}
         <div>{{translation.total_price}} <span class="ga-product_price ga-product_totalprice money">{{total_price | money}}</span></div>
@@ -193,6 +208,7 @@
         <button class="ga-addalltocart" type="button" data-add="{{translation.add_selected_to_cart}}" data-added="{{translation.added_selected_to_cart}}">{{translation.add_selected_to_cart}}</button>
         {% endif %}
       </div>
+      {% endif %}
     </div>
   </div>
   {% endif %}
