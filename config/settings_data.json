@@ -263,7 +263,7 @@
       "static-recently-viewed": {
         "type": "static-recently-viewed",
         "settings": {
-          "enable_recently_viewed_products": true
+          "enable_recently_viewed_products": false
         }
       },
       "1555996299340": {
