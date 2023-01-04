@@ -263,7 +263,7 @@
       "static-recently-viewed": {
         "type": "static-recently-viewed",
         "settings": {
-          "enable_recently_viewed_products": false
+          "enable_recently_viewed_products": true
         }
       },
       "1555996299340": {
@@ -308,28 +308,6 @@
       "static-collection-promo-grid": {
         "type": "static-collection-promo-grid",
         "blocks": {
-          "static-collection-promo-grid-1": {
-            "type": "promotion",
-            "settings": {
-              "preheading": "Preheading",
-              "preheading_color": "#4d4d4d",
-              "title": "Grid",
-              "heading_color": "#4d4d4d",
-              "text": "Use this section to welcome customers to your store, say a bit about your brand, or share news.",
-              "text_color": "#4d4d4d",
-              "block_link": "",
-              "button_text": "",
-              "button_style": "primary",
-              "signpost_color": "#4d4d4d",
-              "text_alignment": "top-left",
-              "promo_width": "half-width",
-              "desktop_height": 380,
-              "mobile_height": 270,
-              "overlay_style": "none",
-              "background": "",
-              "opacity": 50
-            }
-          },
           "static-collection-promo-grid-0": {
             "type": "promotion",
             "settings": {
@@ -344,6 +322,28 @@
               "button_style": "primary",
               "signpost_color": "#4d4d4d",
               "text_alignment": "center-center",
+              "promo_width": "half-width",
+              "desktop_height": 380,
+              "mobile_height": 270,
+              "overlay_style": "none",
+              "background": "",
+              "opacity": 50
+            }
+          },
+          "static-collection-promo-grid-1": {
+            "type": "promotion",
+            "settings": {
+              "preheading": "Preheading",
+              "preheading_color": "#4d4d4d",
+              "title": "Grid",
+              "heading_color": "#4d4d4d",
+              "text": "Use this section to welcome customers to your store, say a bit about your brand, or share news.",
+              "text_color": "#4d4d4d",
+              "block_link": "",
+              "button_text": "",
+              "button_style": "primary",
+              "signpost_color": "#4d4d4d",
+              "text_alignment": "top-left",
               "promo_width": "half-width",
               "desktop_height": 380,
               "mobile_height": 270,
