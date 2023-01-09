@@ -41,8 +41,10 @@
         <div class="utility-bar-right">
           {% for link in linklists[section.settings.right_menu].links %}
             <a href="{{ link.url }}">{{ link.title }}</a>
+            <selector data-type="lsn-switchers" ></selector>
           {% endfor %}
         </div>
+        
       {% endif %}
     </div>
 
