@@ -619,5 +619,9 @@ window.supported_currencies = "{{ settings.mlvedaACS_supportedCurrencies }}";
 {% render 'sh-ssp-theme-snippet' %}
 <!-- /sh-ssp-added -->
 
-{% include 'mlveda-currencies-switcher' %}{% include 'mlveda-currencies' %}{% include 'mlveda-flag' %}{% include 'mlveda-currencies-style' %}</body>
+{% include 'mlveda-currencies-switcher' %}{% include 'mlveda-currencies' %}{% include 'mlveda-flag' %}{% include 'mlveda-currencies-style' %}
+<!-- **BEGIN** Hextom FSB Integration // Main Include - DO NOT MODIFY -->
+    {% render 'hextom_fsb_main', product: product, customer: customer %}
+    <!-- **END** Hextom FSB Integration // Main Include - DO NOT MODIFY -->
+</body>
 </html>
