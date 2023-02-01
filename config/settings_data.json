@@ -157,7 +157,7 @@
     "product_grid_show_second_image": true,
     "product_grid_emphasize_price": false,
     "product_grid_image_style": "medium",
-    "product_grid_image_crop": false,
+    "product_grid_image_crop": true,
     "product_grid_show_quickshop": "desktop",
     "product_grid_show_atc": "desktop",
     "quickshop_show_dcb": true,
@@ -263,7 +263,7 @@
       "static-recently-viewed": {
         "type": "static-recently-viewed",
         "settings": {
-          "enable_recently_viewed_products": false
+          "enable_recently_viewed_products": true
         }
       },
       "1555996299340": {
