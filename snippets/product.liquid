@@ -260,7 +260,7 @@
               <p class="manu-stock"><strong>Manufacturer Stock</strong>:
                 <a id="manufacturerstock">
                   
-                  {% if product.vendor == 'Tech Lighting' or product.vendor == 'Visual Comfort' or product.vendor == 'Generation Lighting' or product.vendor == 'Kichler' or product.vendor == 'WAC' or product.vendor == 'Modern Forms' or product.vendor == 'Modern Forms Fans'%}
+                  {% if product.vendor == 'Visual Comfort Modern' or product.vendor == 'Visual Comfort Signature' or product.vendor == 'Visual Comfort Studio' or product.vendor == 'Visual Comfort Fans' or product.vendor == 'Kichler' or product.vendor == 'WAC' or product.vendor == 'Modern Forms' or product.vendor == 'Modern Forms Fans'%}
                   This item is in stock at our manufacturer. ETA 3-4 weeks.
                   {% else %}
                   This item is in stock at our manufacturer. ETA 3-4 weeks for arrival at Union.
@@ -271,7 +271,7 @@
                   
                   		{% if variant.metafields.specs.dateavailable == "-" %}
                           {% if variant.metafields.specs.manufacturerstock != 0 %}
-                  	{% if product.vendor == 'Tech Lighting' or product.vendor == 'Visual Comfort' or product.vendor == 'Generation Lighting' or product.vendor == 'Kichler' or product.vendor == 'WAC' or product.vendor == 'Modern Forms' or product.vendor == 'Modern Forms Fans'%}
+                  	{% if product.vendor == 'Visual Comfort Modern' or product.vendor == 'Visual Comfort Signature' or product.vendor == 'Visual Comfort Studio' or product.vendor == 'Kichler' or product.vendor == 'WAC' or product.vendor == 'Modern Forms' or product.vendor == 'Modern Forms Fans'%}
                             {{ variant.sku | json }}: {{ "This item is in stock at our manufacturer. ETA 3-4 weeks for arrival at Union." | json }}
                   	{% else %}
                    			{{ variant.sku | json }}: {{ "This item is in stock at our manufacturer. ETA 3-4 weeks." | json }}
