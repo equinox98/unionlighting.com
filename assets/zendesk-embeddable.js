@@ -1,1 +1,1 @@
-var script = document.createElement('script');script.type = 'text/javascript';script.id = 'ze-snippet';script.src = 'https://static.zdassets.com/ekr/snippet.js?key=3da79688-dc23-4cfc-bcc4-90738640cfdb';document.getElementsByTagName('head')[0].appendChild(script);
+var script = document.createElement('script');script.type = 'text/javascript';script.id = 'ze-snippet';script.src = 'https://static.zdassets.com/ekr/snippet.js?key=5d89a525-7af5-4616-9e2f-db26813c55ba';document.getElementsByTagName('head')[0].appendChild(script);
