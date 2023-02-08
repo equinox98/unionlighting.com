@@ -509,6 +509,11 @@
       },
       "thank_you": {
         "page_title": "Thank you for your purchase!"
+      },
+      "shipping_errors": {
+        "shipping_method_not_available_generic": {
+          "one": "This order can’t be shipped to the address you entered. Review your address to ensure that all fields have been entered correctly and try again. If you have any questions please email us at serviceweb@unionltg.com"
+        }
       }
     }
   },
