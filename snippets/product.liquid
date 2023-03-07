@@ -650,8 +650,8 @@
             <!--metafields dimensions-->
               
             <!-- Hanging warning message FOR ONLY LIGHTING, using bulbs to decide(Joanne)-->
-  			 {% if variant.metafields.specs.bulbs != blank and variant.metafields.specs.bulbs != " Not Included" %}
-               <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong>
+  			 {% if product.type != "Furniture" %}
+               <p><strong>TEST</strong>
               </p>
              {% endif %}
             <!-- Hanging warning message (Joanne)-->
