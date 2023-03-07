@@ -649,16 +649,15 @@
             {% endif %}
             <!--metafields dimensions-->
               
-            <!-- Hanging warning message FOR ONLY LIGHTING, (Joanne)-->
-  			 {% if product.type == "Lighting" %}
-               {% if product.tags == "Category_Bulbs" %}
-                      <p><strong>TEST</strong></p>  
-                {% else %}
-                 <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
-                 {% endif %}
-             {% endif %}
+           
             <!-- Hanging warning message (Joanne)-->
-        
+        {% if product.type =! 'Furniture' %}
+          <p><strong>Working!</strong></p>
+        {% elsif product.type == "Lighting" %}
+          <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
+          {% else %}
+            <p><strong>TEST</strong></p> 
+          {% endif %}
             <!--metafields weight-->
 			{% if variant.metafields.specs.weight != blank %}
               <p><strong>Weight</strong>:
