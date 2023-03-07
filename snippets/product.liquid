@@ -652,7 +652,7 @@
             <!-- Hanging warning message FOR ONLY LIGHTING, (Joanne)-->
   			 {% if product.type == "Lighting" %}
                  <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
-               {% else product.tags == "Category_Bulbs" %}
+               {% elsif product.tags == "Category_Bulbs" %}
              <p><strong>TEST</strong></p>      
              {% endif %}
             <!-- Hanging warning message (Joanne)-->
