@@ -650,14 +650,13 @@
             <!--metafields dimensions-->
               
            
-            <!-- Hanging warning message (Joanne)-->
-        {% if product.type != 'Furniture' %}
-          <p><strong>Working!</strong></p>
-        {% elsif product.type == "Lighting" %}
+            <!-- Hanging warning message about height requirements for hanging.(Joanne)-->
+       
+        {% if product.type == "Lighting" %}
           <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
-          {% else %}
-            <p><strong>TEST</strong></p> 
           {% endif %}
+
+          
             <!--metafields weight-->
 			{% if variant.metafields.specs.weight != blank %}
               <p><strong>Weight</strong>:
