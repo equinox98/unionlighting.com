@@ -764,6 +764,8 @@
 
               <!--metafields bulbs-->
 			{% if variant.metafields.specs.bulbs != blank and variant.metafields.specs.bulbs != " Not Included" %}
+                   {% if product.tags contains "Category_Bulbs" %}
+                   {% else %}        
               <p><strong>Bulbs</strong>:
                 <a id="bulbs">
                   {{ variant.metafields.specs.bulbs}}
@@ -775,6 +777,7 @@
                   {% endcapture %}
                 </a>
               </p>
+                   {% endif %}  
             {% endif %}
             <!--metafields bulbs-->
               
