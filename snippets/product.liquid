@@ -500,7 +500,39 @@
               </p>
             {% endif %}
             <!--metafields CartonSize-->
-              
+          
+                 <!--metafields CartonSize2-->
+			{% if variant.metafields.specs.CartonSize2 != blank %}
+              <p class="item-code"><strong>Shipping Carton 2 Size</strong>:
+                <a id="CartonSize">
+                  {{ variant.metafields.specs.CartonSize2}}
+                  {% capture 'meta_data_CartonSize2' %}
+                    {% for variant in product.variants %}
+                      {{ variant.sku | json }}: {{ variant.metafields.specs.CartonSize2 | json }}
+                      {% unless forloop.last %},{% endunless %}
+                    {% endfor %}
+                  {% endcapture %}
+                </a>
+              </p>
+            {% endif %}
+            <!--metafields CartonSize2-->
+
+          <!--metafields Total Shipping Weight-->
+			{% if variant.metafields.specs.total_shipping_weight != blank %}
+              <p class="item-code"><strong>Total Shipping Weight of All boxes</strong>:
+                <a id="total_shipping_weight">
+                  {{ variant.metafields.specs.total_shipping_weight}}
+                  {% capture 'meta_data_total_shipping_weight' %}
+                    {% for variant in product.variants %}
+                      {{ variant.sku | json }}: {{ variant.metafields.specs.total_shipping_weight | json }}
+                      {% unless forloop.last %},{% endunless %}
+                    {% endfor %}
+                  {% endcapture %}
+                </a>
+              </p>
+            {% endif %}
+            <!--metafields Total Shipping Weight-->
+          
            <!--metafields ShippedVia-->
 			{% if variant.metafields.specs.ShippedVia != blank %}
               <p class="item-code"><strong>Shipped Via</strong>:
@@ -976,6 +1008,8 @@
                     var metaDataShippedVia = { {{ meta_data_ShippedVia }} }
                     var metaDataDropship = { {{ meta_data_Dropship }} }
                     var metaDataCartonSize = { {{ meta_data_CartonSize }} }
+                    var metaDataCartonSize2 = { {{ meta_data_CartonSize2 }} }
+                    var metaDataTotalShippingWeight = { {{ meta_data_total_shipping_weight }} }
                     var metaDatasafetyrating = { {{ meta_data_safetyrating }} }
                     var metaDatarugpileheight = { {{ meta_data_rugpileheight }} }
                     var metaDatahwcentertocenter = { {{ meta_data_hwcentertocenter }} }
@@ -1015,6 +1049,8 @@
                         $('.metafields-desc a#ShippedVia').text(metaDataShippedVia[$('.product-sku span').text()]);
                         $('.metafields-desc a#Dropship').text(metaDataDropship[$('.product-sku span').text()]);
                         $('.metafields-desc a#CartonSize').text(metaDataCartonSize[$('.product-sku span').text()]);
+                        $('.metafields-desc a#CartonSize2').text(metaDataCartonSize2[$('.product-sku span').text()]);
+                        $('.metafields-desc a#TotalShippingWeight').text(metaDataTotalShippingWeight[$('.product-sku span').text()]);
                         $('.metafields-desc a#safetyrating').text(metaDatasafetyrating[$('.product-sku span').text()]);
                         $('.metafields-desc a#rugpileheight').text(metaDatarugpileheight[$('.product-sku span').text()]);
                         $('.metafields-desc a#hwcentertocenter').text(metaDatahwcentertocenter[$('.product-sku span').text()]);
