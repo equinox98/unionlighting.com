@@ -651,10 +651,11 @@
               
             <!-- Hanging warning message FOR ONLY LIGHTING, (Joanne)-->
   			 {% if product.type == "Lighting" %}
-                 <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
-                   {% if product.tags == "Category_Bulbs" %}
+               {% if product.tags == "Category_Bulbs" %}
                       <p><strong>TEST</strong></p>  
-                   {% endif %}
+                {% else %}
+                 <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
+                 {% endif %}
              {% endif %}
             <!-- Hanging warning message (Joanne)-->
         
