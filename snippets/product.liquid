@@ -653,11 +653,13 @@
             <!-- Hanging warning message about height requirements for hanging.(Joanne)-->
        
         {% if product.type == "Lighting" %}
+            {% if product.tags contains "Category_Bulbs" %}
+          <p><strong>WORKS!!!!</strong></p>
+            {% else %}
           <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
           {% endif %}
 
-             {% if product.tags contains "Category_Bulbs" %}
-          <p><strong>WORKS!!!!</strong></p>
+           
           {% endif %}
           
             <!--metafields weight-->
