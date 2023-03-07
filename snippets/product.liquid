@@ -650,13 +650,13 @@
             <!--metafields dimensions-->
               
             <!-- Hanging warning message FOR ONLY LIGHTING, (Joanne)-->
-  			 {% if product.type = "Lighting" %}
+  			 {% if product.type == "Lighting" %}
                <p><strong>to Spec Sheet for additional height requirements for hanging.</strong>
               </p>
              {% endif %}
             <!-- Hanging warning message (Joanne)-->
           
-          {% if product.tags = "Category_Bulbs" %}
+          {% if product.tags == "Category_Bulbs" %}
                <p><strong>TEST</strong>
               </p>
              {% endif %}
