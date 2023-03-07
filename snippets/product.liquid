@@ -651,7 +651,7 @@
               
            
             <!-- Hanging warning message (Joanne)-->
-        {% if product.type =! 'Furniture' %}
+        {% if product.type != 'Furniture' %}
           <p><strong>Working!</strong></p>
         {% elsif product.type == "Lighting" %}
           <p><strong>Please refer to Spec Sheet for additional height requirements for hanging.</strong></p>
