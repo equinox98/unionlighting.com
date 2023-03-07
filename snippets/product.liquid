@@ -649,9 +649,9 @@
             {% endif %}
             <!--metafields dimensions-->
               
-            <!-- Hanging warning message FOR ONLY LIGHTING, using bulbs to decide(Joanne)-->
-  			 {% if product.type != "Furniture" %}
-               <p><strong>TEST</strong>
+            <!-- Hanging warning message FOR ONLY LIGHTING, (Joanne)-->
+  			 {% if product.type = "Lighting" %}
+               <p><strong>to Spec Sheet for additional height requirements for hanging.</strong>
               </p>
              {% endif %}
             <!-- Hanging warning message (Joanne)-->
