@@ -1,11 +1,6 @@
-{%- comment %}<locksmith:2395>{% endcomment -%}
-  {%- include 'locksmith' -%}
-{%- comment %}</locksmith:2395>{% endcomment -%}
-
 <!doctype html>
 <html class="no-js" lang="{{ shop.locale }}">
-  <head>{{ locksmith_initializations }}
-<!-- <bablic_snippet> --><script src="//d.bablic.com/snippet/60b65e854ce137000110f530.js?version=4.0"></script><!-- </bablic_snippet> -->
+  <head><!-- <bablic_snippet> --><script src="//d.bablic.com/snippet/60b65e854ce137000110f530.js?version=4.0"></script><!-- </bablic_snippet> -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
 
@@ -14,10 +9,7 @@
     </title>
 
     {% if page_description != blank %}
-      {%- comment %}<locksmith:37de>{% endcomment -%}
-        {%- capture var %}{% render 'locksmith-variables', variable: 'transparent', hiding_scope: 'resource' %}{% endcapture %}{% if var == 'true' %}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
-        {%- comment %}original: <meta name="description" content="{{ page_description | escape }}">{%- endcomment %}
-      {%- comment %}</locksmith:37de>{% endcomment -%}
+      <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
 
     {% include 'favicon' %}

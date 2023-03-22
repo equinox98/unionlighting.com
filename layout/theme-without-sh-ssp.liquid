@@ -1,11 +1,6 @@
-{%- comment %}<locksmith:7f5d>{% endcomment -%}
-  {%- include 'locksmith' -%}
-{%- comment %}</locksmith:7f5d>{% endcomment -%}
-
 <!doctype html>
 <html class="no-js no-touch" lang="{{ shop.locale }}">
-  <head>{{ locksmith_initializations }}
-
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <meta name="p:domain_verify" content="ab9b2d311f4f3d4b5dd18d2c5cbff860"/>
@@ -99,10 +94,7 @@
     </title>
 
     {% if page_description != blank %}
-      {%- comment %}<locksmith:c335>{% endcomment -%}
-        {%- capture var %}{% render 'locksmith-variables', variable: 'transparent', hiding_scope: 'resource' %}{% endcapture %}{% if var == 'true' %}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
-        {%- comment %}original: <meta name="description" content="{{ page_description | escape }}">{%- endcomment %}
-      {%- comment %}</locksmith:c335>{% endcomment -%}
+      <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
 
     {% include 'favicon' %}

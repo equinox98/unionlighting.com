@@ -1,11 +1,6 @@
-{%- comment %}<locksmith:7492>{% endcomment -%}
-  {%- include 'locksmith' -%}
-{%- comment %}</locksmith:7492>{% endcomment -%}
-
 <!doctype html>
 <html class="no-js no-touch" lang="{{ shop.locale }}">
   <head>
-	{{ locksmith_initializations }}
 
     
     <!-- Global site tag (gtag.js) - Google Ads: 404100843 --> 
@@ -95,10 +90,7 @@
     </title>
 
     {% if page_description != blank %}
-      {%- comment %}<locksmith:c1c0>{% endcomment -%}
-        {%- capture var %}{% render 'locksmith-variables', variable: 'transparent', hiding_scope: 'resource' %}{% endcapture %}{% if var == 'true' %}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
-        {%- comment %}original: <meta name="description" content="{{ page_description | escape }}">{%- endcomment %}
-      {%- comment %}</locksmith:c1c0>{% endcomment -%}
+      <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
 
     {% include 'favicon' %}

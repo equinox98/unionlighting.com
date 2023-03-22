@@ -1,11 +1,6 @@
-{%- comment %}<locksmith:daab>{% endcomment -%}
-  {%- include 'locksmith' -%}
-{%- comment %}</locksmith:daab>{% endcomment -%}
-
 <!doctype html>
 <html class="no-js no-touch" lang="{{ shop.locale }}">
-  <head>{{ locksmith_initializations }}
-<!-- <bablic_snippet> --><script src="//d.bablic.com/snippet/60b65e854ce137000110f530.js?version=4.0"></script><!-- </bablic_snippet> -->
+  <head><!-- <bablic_snippet> --><script src="//d.bablic.com/snippet/60b65e854ce137000110f530.js?version=4.0"></script><!-- </bablic_snippet> -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <meta name="p:domain_verify" content="ab9b2d311f4f3d4b5dd18d2c5cbff860"/>
@@ -60,10 +55,7 @@
     </title>
 
     {% if page_description != blank %}
-      {%- comment %}<locksmith:6061>{% endcomment -%}
-        {%- capture var %}{% render 'locksmith-variables', variable: 'transparent', hiding_scope: 'resource' %}{% endcapture %}{% if var == 'true' %}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
-        {%- comment %}original: <meta name="description" content="{{ page_description | escape }}">{%- endcomment %}
-      {%- comment %}</locksmith:6061>{% endcomment -%}
+      <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
 
     {% include 'favicon' %}
