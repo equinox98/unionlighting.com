@@ -138,7 +138,7 @@
     "type_footer_heading_capitalize": true,
     "type_footer_heading_spacing": 0,
     "header_cart_icon": "icon-cart",
-    "product_show_vendor": false,
+    "product_show_vendor": true,
     "product_show_sku": true,
     "product_social_sharing": true,
     "product_sales_badge": true,
@@ -1665,12 +1665,6 @@
     "blocks": {
       "3062113278708352188": {
         "type": "shopify:\/\/apps\/gropulse-rich-snippets-for-seo\/blocks\/gropulse-rich-snippets\/067179e8-363f-48e1-8ee4-5891cda502fa",
-        "disabled": false,
-        "settings": {
-        }
-      },
-      "426380c0-dfde-4c91-832b-3d2003abdf60": {
-        "type": "shopify:\/\/apps\/instagram-feed-story-tiktok\/blocks\/social-widget\/508b8d5b-b176-4dc6-a0ba-2b222db6eb79",
         "disabled": false,
         "settings": {
         }
