@@ -4,4 +4,4 @@
 <p class="mlvedaCartNote" style="display:none">
   {{ settings.mlvedaACS_messageContent | replace: "<<shop.name>>", shop.name | replace:"<<shop.currency>>",shop.currency|replace:"<<shop.selected_currency>>","<span class='selected-currency'></span>"}}
 </p>
-{% endif %}
+{% endif %}{% include 'wiser_related' %}{% include 'wiser_recommended' %}{% include 'wiser_trending' %}{% include 'wiser_recentview' %}{% include 'wiser_newarrivals' %}{% include 'wiser_featured' %}{% include 'wiser_topselling' %}{% include 'wiser_recent_related' %}
