@@ -199,7 +199,7 @@
     "use_minified_js": true,
     "lazy_load": true,
     "enable_instantpage": true,
-    "preload_styles": "await_critical_styles",
+    "preload_styles": "await_all_styles",
     "font_display": "auto",
     "font_family_override": false,
     "preconnect_facebook": false,
