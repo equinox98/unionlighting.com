@@ -506,5 +506,12 @@
         "success": "Merci pour votre subscription!"
       }
     }
+  },
+  "shopify": {
+    "notices": {
+      "cart": {
+        "gift_card_with_components_not_supported": "Le produit groupé '%{name}' ne peut pas être ajouté au panier."
+      }
+    }
   }
 }
