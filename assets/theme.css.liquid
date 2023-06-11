@@ -12894,6 +12894,7 @@ th em,
   letter-spacing: {{ settings.type_button_spacing | divided_by: 100.0 | append: 'em' }};
   display: flex;
   align-items: center;
+  opacity: 1 !important;
 }
 
 {%- if settings.type_button_capitalize -%}
@@ -22738,8 +22739,13 @@ body:not(.user-is-tabbing) .shopify-model-viewer-ui .shopify-model-viewer-ui__bu
 .product-form--atc-qty {
   width: 7.1875rem;
 }
-
+[data-testid="Checkout-button"],
+[data-shopify="payment-button"] *,
+[data-shopify="payment-button"]{
+  opacity: 1 !important;
+}
 .product-form--atc-button {
+  opacity: 1 !important;
   font-size: var(--font-size-button-large);
   padding: 0.875rem 2.125rem;
   letter-spacing: {{ settings.type_button_spacing | divided_by: 100.0 | append: 'em' }};
