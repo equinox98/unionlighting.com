@@ -193,7 +193,7 @@
             data-swatches-container
             aria-label="{{ 'general.accessibility.swatch_options' | t: swatch_trigger: settings.swatches_swatch_trigger, product_title: product.title }}"
           >
-        {% render 'primeb', product: product, hideAssets:'1', primebInnerClass: 'prime-d-inline-block prime-mr-1 prime-mb-1' %}
+
             {% for swatch_value in swatch_values %}
               {% assign swatch_value_downcased = swatch_value | downcase %}
               {% assign use_variant_images = false %}
