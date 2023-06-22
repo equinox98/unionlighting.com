@@ -170,7 +170,7 @@ src="https://www.facebook.com/tr?id=1388634794835685&ev=PageView&noscript=1"
 <!-- GSSTART Code for Swatches head. Do not change -->
 
 {%- if  collection.products  or  search.results  -%}{%- if product -%}{%- else -%}<script type="text/javascript" src="https://gravity-software.com/showswatches/js/shopify/variantswatchesuniontwoa5348.js?v=21a1eeda50cc4d7ce0fd71d5a8284265"></script>{%- endif -%} {%- endif -%}
-<!-- Code for Swatches head. Do not change GSEND --></head>
+<!-- Code for Swatches head. Do not change GSEND -->{% render 'prime-css' %} </head>
 
   <body
     {% unless settings.lazy_load %}
@@ -553,5 +553,5 @@ src="https://www.facebook.com/tr?id=1388634794835685&ev=PageView&noscript=1"
     {%- endif -%}
 </div>
  {%- endif -%}
-<!-- Code for Swatches body. Do not change GSEND --></body>
+<!-- Code for Swatches body. Do not change GSEND -->{% render 'primeb-js' %} </body>
 </html>
