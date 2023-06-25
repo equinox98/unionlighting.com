@@ -157,7 +157,7 @@
     "product_grid_show_second_image": true,
     "product_grid_emphasize_price": false,
     "product_grid_image_style": "medium",
-    "product_grid_image_crop": false,
+    "product_grid_image_crop": true,
     "product_grid_show_quickshop": "desktop",
     "product_grid_show_atc": "desktop",
     "quickshop_show_dcb": true,
@@ -1677,12 +1677,6 @@
       },
       "15323590465973626552": {
         "type": "shopify:\/\/apps\/ai-language-translate-langshop\/blocks\/langshop\/84899e01-2b29-42af-99d6-46d16daa2111",
-        "disabled": false,
-        "settings": {
-        }
-      },
-      "10714188220973388145": {
-        "type": "shopify:\/\/apps\/bss-product-labels-badges\/blocks\/bss-pl\/91bfe765-b604-49a1-805e-3599fa600b24",
         "disabled": false,
         "settings": {
         }
