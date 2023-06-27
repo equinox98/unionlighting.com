@@ -172,7 +172,7 @@
     "swatches_product_page_only": false,
     "swatches_swatch_trigger": "Colour",
     "swatches_shape": "circle",
-    "swatches_product_card_hover": "on-hover",
+    "swatches_product_card_hover": "always",
     "swatches_sidebar_filter_style": "list",
     "swatches_product_card_size": 16,
     "swatches_product_page_size": 16,
