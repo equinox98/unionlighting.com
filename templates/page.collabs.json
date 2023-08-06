@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "collabs": {
+      "type": "apps",
+      "blocks": {
+        "89a28d32-2035-4c4a-bc06-abdde5a732f5": {
+          "type": "shopify:\/\/apps\/collabs\/blocks\/application-page\/54758706-9f25-4fa9-a553-64720a4c998b",
+          "settings": {
+            "heading": "Do you think we would make a good match?",
+            "button_text": "Find Out More!",
+            "button_background_color": "#0d2b35",
+            "button_label_color": "#FFFFFF"
+          }
+        }
+      },
+      "block_order": [
+        "89a28d32-2035-4c4a-bc06-abdde5a732f5"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "collabs"
+  ]
+}
