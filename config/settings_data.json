@@ -268,7 +268,6 @@
       },
       "1555996299340": {
         "type": "dynamic-featured-collection",
-        "disabled": true,
         "blocks": {
           "1575064916423": {
             "type": "title_card",
@@ -286,6 +285,7 @@
         "block_order": [
           "1575064916423"
         ],
+        "disabled": true,
         "settings": {
           "title": "Featured collection",
           "subheading": "",
@@ -372,7 +372,6 @@
       },
       "1568310923146": {
         "type": "dynamic-testimonials",
-        "disabled": true,
         "blocks": {
           "1568310923146-1": {
             "type": "testimonial",
@@ -404,6 +403,7 @@
           "1568310923146-1",
           "1568310923146-2"
         ],
+        "disabled": true,
         "settings": {
           "title": "Testimonials",
           "subtitle": "",
@@ -416,7 +416,6 @@
       },
       "1555969484333": {
         "type": "dynamic-featured-collections",
-        "disabled": true,
         "blocks": {
           "1555969484333-1": {
             "type": "collection",
@@ -430,6 +429,7 @@
         "block_order": [
           "1555969484333-1"
         ],
+        "disabled": true,
         "settings": {
           "title": "",
           "subheading": "",
@@ -817,7 +817,6 @@
       },
       "1556580560778": {
         "type": "dynamic-highlights-banners",
-        "disabled": true,
         "blocks": {
           "1556580560778-2": {
             "type": "highlight",
@@ -849,6 +848,7 @@
           "1556580560778-2",
           "1556580560778-3"
         ],
+        "disabled": true,
         "settings": {
           "background_color": "#e7e1d7",
           "section_spacing_desktop": 36,
@@ -951,7 +951,6 @@
       },
       "1556227206266": {
         "type": "dynamic-collection-list",
-        "disabled": true,
         "blocks": {
           "1556560534987": {
             "type": "collection",
@@ -986,6 +985,7 @@
           "1556227206266-2",
           "1556227206266-1"
         ],
+        "disabled": true,
         "settings": {
           "title": "Outdoor Living",
           "subheading": "<p>Jazz up your outdoor space — from lighting to furniture sets and tableware, it&#x27;s time to give your outdoor area the <em>oomph<\/em> it deserves.<\/p>",
@@ -1055,7 +1055,6 @@
       },
       "1556306537966": {
         "type": "dynamic-featured-collection",
-        "disabled": true,
         "blocks": {
           "1575065114717": {
             "type": "title_card",
@@ -1073,6 +1072,7 @@
         "block_order": [
           "1575065114717"
         ],
+        "disabled": true,
         "settings": {
           "title": "Featured collection",
           "subheading": "",
@@ -1361,7 +1361,6 @@
       },
       "1594762009925": {
         "type": "dynamic-logo-list",
-        "disabled": true,
         "blocks": {
           "1594762009925-2": {
             "type": "logo",
@@ -1414,6 +1413,7 @@
           "1594762528988",
           "1594762009925-2"
         ],
+        "disabled": true,
         "settings": {
           "title": "Featured Brands",
           "subheading": "<p><a href=\"#\" title=\"#\">Click here<\/a> to view all brands<\/p>",
@@ -1504,7 +1504,6 @@
       },
       "1556231275769": {
         "type": "dynamic-promo-grid",
-        "disabled": true,
         "blocks": {
           "1556231275769-1": {
             "type": "promotion",
@@ -1553,6 +1552,7 @@
           "1556231275769-0",
           "1556231275769-1"
         ],
+        "disabled": true,
         "settings": {
           "title": "Grid",
           "subheading": "",
@@ -1683,6 +1683,25 @@
       },
       "4015264832934714879": {
         "type": "shopify:\/\/apps\/ecomsend-popups\/blocks\/app\/a5670cf8-5705-4b01-ad9e-447033feae26",
+        "disabled": false,
+        "settings": {
+        }
+      },
+      "18146506648094396618": {
+        "type": "shopify:\/\/apps\/langshop\/blocks\/sdk\/84899e01-2b29-42af-99d6-46d16daa2111",
+        "disabled": false,
+        "settings": {
+        }
+      },
+      "4318962865815008709": {
+        "type": "shopify:\/\/apps\/boost-ai-search-discovery\/blocks\/boost-sd\/7fc998ae-a150-4367-bab8-505d8a4503f7",
+        "disabled": false,
+        "settings": {
+          "directionRTL": false
+        }
+      },
+      "9144908965052497053": {
+        "type": "shopify:\/\/apps\/glo-related-products-upsell\/blocks\/app-embed\/75cf2d86-3988-45e7-8f28-ada23c99704f",
         "disabled": false,
         "settings": {
         }
