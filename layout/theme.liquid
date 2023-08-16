@@ -227,9 +227,9 @@ src="https://www.facebook.com/tr?id=1388634794835685&ev=PageView&noscript=1"
 <script>
 window.shopCurrency = "{{ shop.currency }}";
 </script>{% include 'bucks-cc' %}
-            {% include 'wiser_popup' %}
+            {% include 'wiser' %}{% include 'wiser_popup' %}
                       {% include 'bss-product-labels-configs' %}
-                        {% render 'prime-css' %} </head>
+                        </head>
                  
 
   <body
@@ -602,5 +602,5 @@ window.shopCurrency = "{{ shop.currency }}";
 <!-- /sh-ssp-added -->
 
 
-{% if content_for_header contains 'product_label' %}{% include 'bss-product-label-js' %}{% include 'bss-label-style-css' %}{% include 'bss-product-label-fonts' %}{% endif %}{% render 'primeb-js' %} </body>
+{% if content_for_header contains 'product_label' %}{% include 'bss-product-label-js' %}{% include 'bss-label-style-css' %}{% include 'bss-product-label-fonts' %}{% endif %}</body>
 </html>
