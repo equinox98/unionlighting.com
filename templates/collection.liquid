@@ -1,4 +1,7 @@
 {% render 'shogun-products', content: collection %}
 {{collection.metafields.shogun.above}}
-4
+{% section 'static-collection' %}
+{% section 'static-recently-viewed' %}
+{% section 'static-collection-promo-grid' %}
 {{collection.metafields.shogun.below}}
+{% include 'wiser_trending' %}{% include 'wiser_recentview' %}{% include 'wiser_newarrivals' %}{% include 'wiser_featured' %}{% include 'wiser_topselling' %}{% include 'wiser_recent_related' %}
