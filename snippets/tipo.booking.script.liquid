@@ -1,0 +1,179 @@
+<script type="text/javascript">
+    var Tipo = Tipo || {};
+    Tipo.Booking = Tipo.Booking || {};
+    Tipo.Booking.appUrl = 'https://booking.tipo.io';
+    Tipo.Booking.shop = {
+      id: 42045,
+      url : 'unionluminaires.myshopify.com',
+      domain : '{{shop.domain}}',
+      settings : "{\"general\":{\"hide_add_to_cart\":\"2\",\"hide_buy_now\":\"2\",\"redirect_url\":null,\"allow_bring_more\":false,\"confirm_to\":\"checkout\",\"time_format\":\"24h\",\"multipleEmployees\":\"1\",\"hide_employee_on_front_store\":true,\"multipleLocations\":\"0\",\"show_location_on_front_store\":true,\"formatDate\":\"YYYY-MM-DD\",\"formatDateServe\":\"Y-m-d\",\"formatDateTime\":\"YYYY-MM-DD HH:mm\",\"formatTime\":\"HH:mm\",\"weekStart\":0},\"booking\":{\"text_price_color\":\"#ff0000\",\"timeBlock\":\"fixed\",\"stepping\":\"60\",\"font\":\"Arial\",\"primary_color\":\"#1fd3c0\",\"cancel_button\":\"#ffffff\",\"text_color\":\"#6370a7\",\"calender_background_color\":\"#2b3360\",\"calender_text_color\":\"#ffffff\",\"day_off_color\":\"#a3a3a3\",\"time_slot_color\":\"#414c89\",\"time_slot_color_hover\":\"#313d88\",\"selected_time_slot_color\":\"#ffd153\",\"background_color_calendar\":\"#2b3360\",\"background_image\":\"preset1.jpg\",\"selected_day_color\":\"#1fd3c0\",\"time_slot_color_selected\":\"#ff007b\",\"background_color_box_message_time_slot_no_available\":\"#e9e9e9\",\"text_color_text_box_message_time_slot_no_available\":\"#424242\",\"time_slot_no_available_color\":\"#a3a3a3\",\"sortProduct\":{\"type\":1,\"sortProductAuto\":\"asc\",\"sortProductManually\":[\"5458516410532\"]},\"statusDefault\":\"2\"},\"translation\":{\"languageDatepicker\":\"en-US\",\"customDatePickerDays\":\"Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday\",\"customDatePickerDaysShort\":\"Sun, Mon, Tue, Wed, Thu, Fri, Sat\",\"customDatePickerDaysMin\":\"Su, Mo, Tu, We, Th, Fr, Sa\",\"customDatePickerMonths\":\"January, February, March, April, May, June, July, August, September, October, November, December\",\"customDatePickerMonthsShort\":\"Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\",\"widget\":{\"default\":{\"please_select\":\"Please select service\",\"training\":\"Training\",\"trainer\":\"Trainer\",\"bringing_anyone\":\"Bringing anyone with you?\",\"num_of_additional\":\"Number of Additional People\",\"date_and_time\":\"Pick date & time\",\"continue\":\"Continue\",\"total_price\":\"Total Price\",\"confirm\":\"Confirm\",\"cancel\":\"Cancel\",\"thank_you\":\"Thank you! Your booking is completed\",\"date\":\"Date\",\"time\":\"Time\",\"datetime\":\"Date Time\",\"duration\":\"Duration\",\"location\":\"Location\",\"first_name\":\"First name\",\"last_name\":\"Last name\",\"phone\":\"Phone\",\"email\":\"Email\",\"address\":\"Address\",\"address_2\":\"Address 2\",\"status\":\"Status\",\"country\":\"Country\",\"full_name\":\"Fullname\",\"product\":\"Service\",\"product_placeholder\":\"Select your service\",\"variant\":\"Variant\",\"variant_placeholder\":\"Select your variant\",\"location_placeholder\":\"Select a location\",\"employee\":\"Employee\",\"employee_placeholder\":\"Select an employee\",\"quantity\":\"Quantity\",\"back\":\"Back\",\"payment\":\"Payment\",\"you_can_only_bring\":\"You can only bring {number} people\",\"not_available\":\"Selected service is currently not available.\",\"no_employee\":\"No employee\",\"no_location\":\"No location\",\"is_required\":\"This field is required.\",\"valid_phone_number\":\"Please enter a valid phone number.\",\"valid_email\":\"Please enter a valid email.\",\"time_slot_no_available\":\"This slot is no longer available\",\"price\":\"Price\",\"export_file_isc\":\"Export to file isc\",\"confirm_free_booking_successfully\":\"Thank for your booking. We will get back to you shortly.\",\"confirm_free_booking_unsuccessfully\":\"Whoops, looks like something went wrong.\",\"duration_unit\":\"minutes\"}}},\"integrate\":{\"zapier\":{\"cretaeOrUpdateUrl\":\"\",\"deleteUrl\":\"\"}},\"free_form\":{\"first_name\":{\"enable\":true,\"label\":\"First name\",\"required\":true},\"last_name\":{\"enable\":true,\"label\":\"Last name\",\"required\":true},\"phone_number\":{\"enable\":false,\"label\":\"Phone number\",\"required\":true},\"email\":{\"label\":\"Email\",\"required\":true,\"enable\":true}}}",
+      locale: 'en',
+      plan : {"id":13,"version":"2.1","plan":"FREE","feature":"{\"employee\":1,\"product\":1,\"location\":1,\"extraFieldSet\":false,\"hideBrand\":false,\"trialDay\":\"0\",\"trialDayOld\":\"0\",\"priceOld\":\"0\",\"googleCalendar\":false,\"googleSheet\":false,\"activeCampaign\":false,\"mailchimp\":false,\"klaviyo\":false,\"getResponse\":false,\"hubspot\":false,\"omnisend\":false,\"sendInBlue\":false}","price":"0.00","type":"month","status":1,"created_at":null,"updated_at":"2023-05-08 01:56:42"}
+    };
+    Tipo.Booking.locale = {{shop.locale | json }};
+    Tipo.Booking.countryCode = ['ca'];
+    {% if product %}
+      Tipo.Booking.product = {{ product | json }};
+      Tipo.Booking.product.options = {{ product.options_with_values | json }};
+      {% for variant in product.variants %}
+        Tipo.Booking.product.variants[{{forloop.index0}}].inventory_management = '{{variant.inventory_management }}';
+        Tipo.Booking.product.variants[{{forloop.index0}}].inventory_quantity = {{variant.inventory_quantity }};
+        Tipo.Booking.product.variants[{{forloop.index0}}].inventory_policy = '{{variant.inventory_policy }}';
+      {% endfor %}
+    {% endif %}
+
+    {% if customer %}
+      Tipo.Booking.customer = {
+        id : {{ customer.id }},
+        first_name : "{{ customer.first_name }}",
+        last_name : "{{ customer.last_name }}",
+        email : "{{ customer.email }}",
+        phone : "{{ customer.phone }}"
+      };
+    {% endif %}
+
+    Tipo.Booking.settings = {"general":{"hide_add_to_cart":"2","hide_buy_now":"2","redirect_url":null,"allow_bring_more":false,"confirm_to":"checkout","time_format":"24h","multipleEmployees":"1","hide_employee_on_front_store":true,"multipleLocations":"0","show_location_on_front_store":true,"formatDate":"YYYY-MM-DD","formatDateServe":"Y-m-d","formatDateTime":"YYYY-MM-DD HH:mm","formatTime":"HH:mm","weekStart":0},"booking":{"text_price_color":"#ff0000","timeBlock":"fixed","stepping":"60","font":"Arial","primary_color":"#1fd3c0","cancel_button":"#ffffff","text_color":"#6370a7","calender_background_color":"#2b3360","calender_text_color":"#ffffff","day_off_color":"#a3a3a3","time_slot_color":"#414c89","time_slot_color_hover":"#313d88","selected_time_slot_color":"#ffd153","background_color_calendar":"#2b3360","background_image":"preset1.jpg","selected_day_color":"#1fd3c0","time_slot_color_selected":"#ff007b","background_color_box_message_time_slot_no_available":"#e9e9e9","text_color_text_box_message_time_slot_no_available":"#424242","time_slot_no_available_color":"#a3a3a3","sortProduct":{"type":1,"sortProductAuto":"asc","sortProductManually":["5458516410532"]},"statusDefault":"2"},"translation":{"languageDatepicker":"en-US","customDatePickerDays":"Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday","customDatePickerDaysShort":"Sun, Mon, Tue, Wed, Thu, Fri, Sat","customDatePickerDaysMin":"Su, Mo, Tu, We, Th, Fr, Sa","customDatePickerMonths":"January, February, March, April, May, June, July, August, September, October, November, December","customDatePickerMonthsShort":"Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec","widget":{"default":{"please_select":"Please select service","training":"Training","trainer":"Trainer","bringing_anyone":"Bringing anyone with you?","num_of_additional":"Number of Additional People","date_and_time":"Pick date & time","continue":"Continue","total_price":"Total Price","confirm":"Confirm","cancel":"Cancel","thank_you":"Thank you! Your booking is completed","date":"Date","time":"Time","datetime":"Date Time","duration":"Duration","location":"Location","first_name":"First name","last_name":"Last name","phone":"Phone","email":"Email","address":"Address","address_2":"Address 2","status":"Status","country":"Country","full_name":"Fullname","product":"Service","product_placeholder":"Select your service","variant":"Variant","variant_placeholder":"Select your variant","location_placeholder":"Select a location","employee":"Employee","employee_placeholder":"Select an employee","quantity":"Quantity","back":"Back","payment":"Payment","you_can_only_bring":"You can only bring {number} people","not_available":"Selected service is currently not available.","no_employee":"No employee","no_location":"No location","is_required":"This field is required.","valid_phone_number":"Please enter a valid phone number.","valid_email":"Please enter a valid email.","time_slot_no_available":"This slot is no longer available","price":"Price","export_file_isc":"Export to file isc","confirm_free_booking_successfully":"Thank for your booking. We will get back to you shortly.","confirm_free_booking_unsuccessfully":"Whoops, looks like something went wrong.","duration_unit":"minutes"}}},"free_form":{"first_name":{"enable":true,"label":"First name","required":true},"last_name":{"enable":true,"label":"Last name","required":true},"phone_number":{"enable":false,"label":"Phone number","required":true},"email":{"label":"Email","required":true,"enable":true}},"languageDatepicker":{"days":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"daysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"daysMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]}}
+  Tipo.Booking.page = {
+    type : '{{ request.page_type }}'
+  };
+  Tipo.Booking.money_format = '{{shop.money_format}}';
+  Tipo.Booking.timezone = {
+    shop : 'America/New_York',
+    server : 'UTC'
+  }
+  Tipo.Booking.configs = {
+    locations : [{"id":48061,"name":"Default location","employee_ids":[51933]}],
+    employees : [{"id":51933,"first_name":"Pamela","last_name":"Diaz","avatar":"noimg.png","location_ids":[48061]}]
+  };
+  Tipo.Booking.configs.products = [
+        ...{% render 'tipo.booking.products.data.0' %},
+      ]
+  
+  Tipo.Booking.trans = Tipo.Booking.settings.translation.widget[Tipo.Booking.locale] || Tipo.Booking.settings.translation.widget.default
+</script>
+<textarea style="display:none !important" class="tipo-money-format">{{ shop.money_format }}</textarea>
+<style>
+  .tpb-booking-form *{
+    font-family: Arial;
+  }
+  .tpb-booking-form .copyright{
+    display: none;
+  }
+  .tpb-booking-form .tpb-box .tpb-form-control .tpb-text-price{
+    color: #ff0000;
+  }
+  .tpb-booking-form .tpb-box .tpb-form-control label,
+  .tpb-booking-form .tpb-box .tpb-form-control #tpb-message-bring_qty,
+  .tpb-booking-form .tpb-box .tpb-form-control .ss-single-selected,
+  .tpb-booking-form .tpb-box .tpb-form-control #tpb-productTitle-input,
+  .tpb-booking-form .tpb-box .extra-fields .element,
+  .tpb-booking-form .tpb-box .extra-fields .element label,
+  .tpb-booking-form .tpb-box .extra-fields .element input,
+  .tpb-booking-form .tpb-box .extra-fields .element textarea,
+  .tpb-booking-form .tpb-box .extra-fields .element select,
+  .tpb-booking-form .tpb-box .label,
+  .tpb-booking-form .tpb-box .booking-info{
+    color: #6370a7;
+  }
+  .tpb-booking-form .tpb-box .content .step1 {
+    background-image: url('https://cdn.shopify.com/s/files/1/0425/8968/3876/t/35/assets/tipo.booking.img-background.preset1.jpg');
+  }
+  .tpb-booking-form .tpb-box .content .step1 .inner-step h5{
+    color: #6370a7;
+  }
+  .tpb-message_not-available,
+  .tpb-message_not-available .dismiss svg {
+    color: #6370a7;
+  }
+  .tpb-box .action .continue-button,
+  .tpb-box .action .confirm-button,
+  .tpb-box .action .confirm-button.loading .spinner{
+    background-color: #1fd3c0;
+  }
+  .tpb-box .action .back-button{
+    color: #6370a7;
+  }
+  .tpb-form-control.price p {
+    color: #6370a7;
+  }
+
+  /* Next Step */
+  .tpb-box .content .step2{
+    background: #2b3360;
+  }
+  .tpb-box .content .confirm .product-info .title,
+  .tpb-box .content .confirm .booking-info,
+  .tpb-box .content .confirm .booking-info label
+  .tpb-box .content .confirm .extra-fields .element *,
+  .tpb-box .content .confirm .extra-fields .element .ss-single-selected,
+  .tpb-box .content .confirm .extra-fields .tpb-radio-group,
+  .tpb-box .content .confirm .extra-fields .tpb-radio-group [type="radio"]:not(:checked) + label,
+  .tpb-box .content .confirm .subtotal > .g-row ,
+  .success_message_when_free_booking,
+  .tpb-wrapper-btnExport,
+  .tpb-wrapper-btnExport .tpb-btnExport .tpb-btnExport-title .tpb-btnExport-title_text,
+  .infoBooking,
+  .infoBooking label,
+  .confirmBookingFree_action,
+  .confirmBookingFree_action a div span,
+  {
+    color: #6370a7;
+  }
+  .tpb-box .content .confirm .extra-fields .tpb-checkbox .ctx:hover span:first-child
+  .tpb-box .content .confirm .extra-fields .tpb-checkbox .inp-box:checked + .ctx span:first-child
+  {
+    border-color: #6370a7;
+  }
+  .tpb-box .content .confirm .extra-fields .tpb-radio-group [type="radio"]:checked + label:after,
+  .tpb-box .content .confirm .extra-fields .tpb-checkbox .inp-box:checked + .ctx span:first-child{
+    background: #6370a7;
+  }
+  .tpb-box .content .confirm .subtotal > .g-row .value{
+    color: #1fd3c0;
+  }
+  .tpb-datepicker .datepicker-panel > ul > li {
+    color: #ffffff;
+  }
+  .tpb-datepicker .datepicker-panel > ul > li:hover{
+    background: #313d88;
+  }
+  .tpb-datepicker .datepicker-panel > ul > li.disabled{
+    color: #a3a3a3;
+  }
+  .tpb-datepicker .datepicker-panel > ul > li.picked{
+    background: #1fd3c0;
+  }
+  .tpb-timepicker .radiobtn{
+    color: #ffffff;
+  }
+  .tpb-timepicker .radiobtn .tooltip{
+    background-color: #e9e9e9;
+    color: #424242;
+  }
+  .tpb-timepicker .radiobtn label{
+    background: #414c89;
+    color: #ffffff;
+  }
+  .tpb-timepicker .radiobtn label:hover {
+    background: #313d88;
+  }
+  .tpb-timepicker .radiobtn label.disabled {
+    background: #a3a3a3;
+  }
+  .tpb-timepicker .radiobtn input[type="radio"]:checked + label,
+  .tpb-timepicker .radiobtn input[type="checkbox"]:checked + label {
+    background: #ff007b;
+  }
+
+  /* History */
+  #tpb-history-booking * {
+    font-family: Arial;
+  }
+  #tpb-history-booking .tpb-table tr th{
+    color: #6370a7;
+  }
+  #tpb-history-booking .copyright {
+    display: none;
+  }
+</style>
+<script src='{{ 'tipo.booking.index.min.js' | asset_url }}' defer ></script>
