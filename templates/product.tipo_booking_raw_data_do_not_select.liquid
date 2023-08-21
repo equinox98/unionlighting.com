@@ -1,0 +1,11 @@
+{% comment %}
+  Please do not use this template for your product.
+{% endcomment %}
+{% layout none %}
+tpbProductApi = {{ product | json }};
+tpbProductApi.options = {{ product.options_with_values | json }};
+{% for variant in product.variants %}
+  tpbProductApi.variants[{{ forloop.index0 }}].inventory_policy  = '{{variant.inventory_policy}}';
+  tpbProductApi.variants[{{ forloop.index0 }}].inventory_quantity  = {{variant.inventory_quantity | default : 0}};
+  tpbProductApi.variants[{{ forloop.index0 }}].old_inventory_quantity  = {{variant.old_inventory_quantity | default : 0}};
+{% endfor %}
