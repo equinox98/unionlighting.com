@@ -7,24 +7,7 @@
     //console.log(userid);
 
             document.addEventListener('DOMContentLoaded', function(event) {
-                // setTimeout(function(){ 
-                    // if (window.location.pathname.match("products")) {
-                    // getCountryCode();    
-                    // } else {
-                    //     var visitorclass = document.getElementsByClassName('primebVisitorCountry');
-                    // for (var i = 0; i < visitorclass.length; i++) {
-                    // var titleclass = document.getElementsByClassName('primebText');
-                    // var issetvisitorcountryrule = visitorclass[i].getAttribute('visitorcountryrule');  
-                    // var secondChild = visitorclass[i].querySelector('div:nth-child(1)');
-                    // var thirdChild = secondChild.querySelector('div:nth-child(1)'); 
-                    // if( issetvisitorcountryrule == '1'){
-                    // visitorclass[i].style.setProperty("display", "none", "important");
-                    // }
-                    // }
-                    // }
-                    // }, 500); 
-           
-
+                      getCountryCode();                
                 if (window.jQuery){
 
                 } else {
@@ -90,65 +73,37 @@
         }
 
         function getCName(countryCode) {
-        var variantproductid = '{{product.id}}'; 
-        var xhr = new XMLHttpRequest(); 
-        var productname = '{{ product.handle }}';
-        var primeBadgesAll2 = document.getElementsByClassName('primeBadges');
-           for (var i = 0; i < primeBadgesAll2.length; i++){
-            var primebOuterClass = primeBadgesAll2[i].getAttribute('data-primebOuterClass');
-                    var primebOuterStyle = primeBadgesAll2[i].getAttribute('data-primebOuterStyle');
-                    var primebInnerClass = primeBadgesAll2[i].getAttribute('data-primebInnerClass');
-                    var primebInnerStyle = primeBadgesAll2[i].getAttribute('data-primebInnerStyle');
-                    var primebGroup = primeBadgesAll2[i].getAttribute('data-primebGroup');
-                    var primebProductId = primeBadgesAll2[i].getAttribute('data-primeproductsid');
-                    var result = Math.random().toString(36).substring(2,7);
-                 
-                if(primebGroup == 1){
-                var urlhit = productname+'/?view=primebcountry&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==1&countryCode=='+countryCode;
-                }else if(primebGroup == 2){
-                var urlhit = productname+'/?view=primebcountry&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==2&countryCode=='+countryCode;
-                }else{
-                var urlhit = productname+'/?view=primebcountry&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==3&countryCode=='+countryCode;
+            var country_data = "AF,Afghanistan|AL,Albania|DZ,Algeria|AD,Andorra|AO,Angola|AI,Anguilla|AQ,Antarctica|AG,Antigua and Barbuda|AR,Argentina|AM,Armenia|AW,Aruba|AU,Australia|AT,Austria|AZ,Azerbaijan|BS,Bahamas|BH,Bahrain|BD,Bangladesh|BB,Barbados|BY,Belarus|BE,Belgium|BZ,Belize|BJ,Benin|BM,Bermuda|BT,Bhutan|BO,Bolivia|BQ,Bonaire,Sint Eustatius and Saba|BA,Bosnia and Herzegovina|BW,Botswana|BV,Bouvet Island|BR,Brazil|IO,British Indian Ocean Territory|BN,Brunei Darussalam|BG,Bulgaria|BF,Burkina Faso|BI,Burundi|CV,Cabo Verde|KH,Cambodia|CM,Cameroon|CA,Canada|KY,Cayman Islands|CF,Central African Republic|TD,Chad|CL,Chile|CN,China|CX,Christmas Island|CC,Cocos (Keeling) Islands|CO,Colombia|KM,Comoros|CG,Congo|CD,Congo,Democratic Republic of the|CK,Cook Islands|CR,Costa Rica|CI,Côte d'Ivoire|HR,Croatia|CU,Cuba|CW,Curaçao|CY,Cyprus|CZ,Czech Republic|DK,Denmark|DJ,Djibouti|DM,Dominica|DO,Dominican Republic|EC,Ecuador|EG,Egypt|SV,El Salvador|GQ,Equatorial Guinea|ER,Eritrea|EE,Estonia|SZ,Eswatini|ET,Ethiopia|FK,Falkland Islands (Malvinas)|FO,Faroe Islands|FJ,Fiji|FI,Finland|FR,France|GF,French Guiana|PF,French Polynesia|TF,French Southern Territories|GA,Gabon|GM,Gambia|GE,Georgia|DE,Germany|GH,Ghana|GI,Gibraltar|GR,Greece|GL,Greenland|GD,Grenada|GP,Guadeloupe|GU,Guam|GT,Guatemala|GG,Guernsey|GN,Guinea|GW,Guinea-Bissau|GY,Guyana|HT,Haiti|HM,Heard Island and McDonald Islands|VA,Holy See|HN,Honduras|HK,Hong Kong|HU,Hungary|IS,Iceland|IN,India|ID,Indonesia|IR,Iran|IQ,Iraq|IE,Ireland|IM,Isle of Man|IL,Israel|IT,Italy|JM,Jamaica|JP,Japan|JE,Jersey|JO,Jordan|KZ,Kazakhstan|KE,Kenya|KI,Kiribati|KP,Korea|KR,Korea|KW,Kuwait|KG,Kyrgyzstan|LA,Lao People's Democratic Republic|LV,Latvia|LB,Lebanon|LS,Lesotho|LR,Liberia|LY,Libya|LI,Liechtenstein|LT,Lithuania|LU,Luxembourg|MO,Macao|MG,Madagascar|MW,Malawi|MY,Malaysia|MV,Maldives|ML,Mali|MT,Malta|MH,Marshall Islands|MQ,Martinique|MR,Mauritania|MU,Mauritius|YT,Mayotte|MX,Mexico|FM,Micronesia|MD,Moldova|MC,Monaco|MN,Mongolia|ME,Montenegro|MS,Montserrat|MA,Morocco|MZ,Mozambique|MM,Myanmar|NA,Namibia|NR,Nauru|NP,Nepal|NL,Netherlands|NC,New Caledonia|NZ,New Zealand|NI,Nicaragua|NE,Niger|NG,Nigeria|NU,Niue|NF,Norfolk Island|MK,North Macedonia|MP, Northern Mariana Islands|NO,Norway|OM,Oman|PK,Pakistan|PW,Palau|PS,Palestine|PA,Panama|PG,Papua New Guinea|PY,Paraguay|PE,Peru|PH,Philippines|PN,Pitcairn|PL,Poland|PT,Portugal|PR,Puerto Rico|QA,Qatar|RE,Réunion|RO,Romania|RU,Russian Federation|RW,Rwanda|BL,Saint Barthélemy|SH,Saint Helena|KN,Saint Kitts and Nevis|LC,Saint Lucia|MF,Saint Martin (French part)|PM,Saint Pierre and Miquelon|VC,Saint Vincent and the Grenadines|WS,Samoa|SM,San Marino|ST,Sao Tome and Principe|SA,Saudi Arabia|SN,Senegal|RS,Serbia|SC,Seychelles|SL,Sierra Leone|SG,Singapore|SX,Sint Maarten (Dutch part)|SK,Slovakia|SI,Slovenia|SB,Solomon Islands|SO,Somalia|ZA,South Africa|GS,South Georgia and the South Sandwich Islands|SS,South Sudan|ES,Spain|LK,Sri Lanka|SD,Sudan|SR,Suriname|SJ,Svalbard and Jan Mayen|SE,Sweden|CH,Switzerland|SY,Syrian Arab Republic|TW,Taiwan|TJ,Tajikistan|TZ,Tanzania|TH,Thailand|TL,Timor-Leste|TG,Togo|TK,Tokelau|TO,Tonga|TT,Trinidad and Tobago|TN,Tunisia|TR,Turkey|TM,Turkmenistan|TC,Turks and Caicos Islands|TV,Tuvalu|UG,Uganda|UA,Ukraine|AE,United Arab Emirates|GB,United Kingdom|US,United States|UM,United States Minor Outlying Islands|UY,Uruguay|UZ,Uzbekistan|VU,Vanuatu|VE,Venezuela|VN,Viet Nam|VG,Virgin Islands|VI,Virgin Islands|WF,Wallis and Futuna|EH,Western Sahara|YE,Yemen|ZM,Zambia|ZW,Zimbabwe";
+            var countries = country_data.split("|");
+            for (var i = 0; i < countries.length; i++) {
+            var country = countries[i].split(",");
+            var countryCodedata = country[0];
+            var Visitorcountry = country[1];
+            if(countryCode== countryCodedata)
+            {
+               var VisitorCountryName=Visitorcountry;
+            }
+            }
+            var visitorclass = document.getElementsByClassName('primebVisitorCountry');
+                for (var i = 0; i < visitorclass.length; i++) {
+                var issetvisitorcountryrule = visitorclass[i].getAttribute('visitorcountryrule');  
+                var secondChild = visitorclass[i].querySelector('div:nth-child(1)');
+                var thirdChild = secondChild.querySelector('div:nth-child(1)'); 
+                if( issetvisitorcountryrule == '1'){
+                var elements = document.querySelectorAll('.primebVisitorCountryName');
+                elements.forEach(function(element) {
+                element.textContent = VisitorCountryName;
+                });
                 }
-
-
-
-               // var urlhit = productname+'/?view=primebcountry&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group=='+primebGroup+'&countryCode=='+countryCode;
-                // var urlhit = productname+'/?view=primebcountry&sort_by=='+result+'&countryCode=='+countryCode;
-               //console.log(urlhit);
-           }
-        xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-        var countryData = xhr.responseText;
-        //var countryName = countryData.country_code;
-        //console.log(countryData);
-                // var visitorclass = document.getElementsByClassName('primebVisitorCountry');
-                // for (var i = 0; i < visitorclass.length; i++) {
-                // var titleclass = document.getElementsByClassName('primebText');
-                // var issetvisitorcountryrule = visitorclass[i].getAttribute('visitorcountryrule');  
-                // var secondChild = visitorclass[i].querySelector('div:nth-child(1)');
-                // var thirdChild = secondChild.querySelector('div:nth-child(1)'); 
-                // if( issetvisitorcountryrule == '1'){
-                // thirdChild.textContent = countryData;
-                // }
-                // } 
-                $('.outerprimeb'+variantproductid+'-'+primebGroup).replaceWith(countryData );
+                } 
         }
-        else{
-            //console.log("Failed country");
-        }
-        };
-        xhr.open('GET', urlhit, true);
-        xhr.send();
-        }
-
+    
     function checkprimebjquery() {
         if (window.jQuery) {
             checkVariantInventory("{{product.selected_or_first_available_variant.title | escape }}","first");
 
             $(document).on("click", ".variants-ui__option-value-name", function() {
                 var optionMap = [];
-                  //getCountryCode(); 
                 if(optionMap.length == 0){
                     setTimeout(function(){ 
                         optionMap = $('.variants-ui__option-values').attr("data-variant-option-chosen-value");
@@ -163,14 +118,12 @@
                     $(".select2-hidden-accessible").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
             $('select[name="option1"]').on('change', function(){  
             var optionMap = [];     
             optionMap[0] = $(this).val();
-            //getCountryCode(); 
             checkVariantInventory(optionMap);
 
             });
@@ -181,7 +134,6 @@
                     $(".single-option-selector").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -192,7 +144,6 @@
                     $(".ProductForm__Option select").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -203,7 +154,6 @@
                     $(".tt-options-swatch li").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -214,7 +164,6 @@
                     $(".swatch-element").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -225,7 +174,6 @@
                     $(".form__input--select").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -236,7 +184,6 @@
                     $(".product-form__input select").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -248,7 +195,6 @@
             dataArray.push(dataValue);
 
             });
-            //getCountryCode(); 
             setTimeout(function() { 
             checkVariantInventory(dataArray);
             }, 2000);
@@ -259,7 +205,6 @@
                     $(".sgl-opt-selector-product-template").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -270,7 +215,6 @@
                     $(".tt-options-swatch li").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -281,7 +225,6 @@
                     $(".product-option-value-item").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -292,7 +235,6 @@
                     $(".clickyboxes a").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -303,7 +245,6 @@
                     $("[data-product-options-container] .form-field-input").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -314,7 +255,6 @@
                     $("#data-product-option-0").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -325,7 +265,6 @@
                     $(".product-options__section .active").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -336,7 +275,6 @@
                     $(".product-options__value").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -347,7 +285,6 @@
                     $(".variant-input").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -358,7 +295,6 @@
                     $(".product-form__single-selector").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -369,7 +305,6 @@
                     $(".gt_swatches--select.gf_active").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -380,7 +315,6 @@
                     $(".nt-swatch").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -391,7 +325,6 @@
                     $(".disclosure--input").each(function(key) {
                         optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -402,7 +335,6 @@
                 $(".option-selector__btns input[type=radio]:checked").each(function(key) {
                     optionMap[key] = $(this).val();
                 });
-                //getCountryCode(); 
                 checkVariantInventory(optionMap);
                 }
             });
@@ -412,8 +344,7 @@
                 if(optionMap.length == 0){
                 $(".product-form__input input[type=radio]:checked").each(function(key) {
                     optionMap[key] = $(this).val();
-                });
-                //getCountryCode();   
+                }); 
                 checkVariantInventory(optionMap);
                 }
             });
@@ -424,7 +355,6 @@
                     $(".swatch-container input[type=radio]:checked").each(function(key) {
                     optionMap[key] = $(this).val();
                     });
-                    //getCountryCode(); 
                     checkVariantInventory(optionMap);
                 }
             });
@@ -448,24 +378,7 @@
 
     window.addEventListener('load', (event) => {
         primebCountdownTimer();
-        //resizeFunction();
-         //setTimeout(function(){ 
-                    // if (window.location.pathname.match("products")) {
-                    // getCountryCode();   
-                    // } else {
-                    //     var visitorclass = document.getElementsByClassName('primebVisitorCountry');
-                    // for (var i = 0; i < visitorclass.length; i++) {
-                    // var titleclass = document.getElementsByClassName('primebText');
-                    // var issetvisitorcountryrule = visitorclass[i].getAttribute('visitorcountryrule');  
-                    // var secondChild = visitorclass[i].querySelector('div:nth-child(1)');
-                    // var thirdChild = secondChild.querySelector('div:nth-child(1)'); 
-                    // if( issetvisitorcountryrule == '1'){
-                    // visitorclass[i].style.setProperty("display", "none", "important");
-                    // }
-                    // }
-                    // }
-                    //}, 500);
-    
+              getCountryCode(); 
         document.getElementById("prime-modal-close").onclick = function() {mymodalprimeb()};
         window.onclick = function(event) {
             if (event.target.classList[1] == 'prime-modal-open') {
@@ -473,6 +386,51 @@
             }
         }
     });
+
+// Function to be invoked when the element becomes visible
+        function handleVisibleElement(entries, observer) {
+        entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+        // Element is visible, perform desired actions here
+        // Call your function here
+        primebCountdownTimer();
+        getCountryCode(); 
+        // Stop observing the target element
+        observer.unobserve(entry.target);
+        }
+        });
+        }
+
+        // Target element with the class 'product-recommendations'
+        const targetElement = document.querySelector('.product-recommendations');      
+
+        if(targetElement)
+            {
+            // Create a new Intersection Observer instance
+            const observer = new IntersectionObserver(
+            (entries) => {
+            // Use a debounce function to limit the number of function invocations
+            debounce(handleVisibleElement, 100)(entries, observer);
+            },
+            {
+            root: null, // Viewport
+            threshold: 0.5, // 50% of the element must be visible to trigger the callback
+            }
+            );
+        observer.observe(targetElement);
+        }
+
+        // Debounce function to limit the rate of function invocations
+        function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+        func.apply(this, args);
+        }, delay);
+        };
+        }
+
 
     function expdeliverydate(value,count) {
         var weekdays = '6,0';
@@ -567,6 +525,9 @@
                 }
             }
         }
+        setTimeout(function(){ 
+        getCountryCode();
+        },500);
     }
 
 
@@ -655,10 +616,9 @@
 
         }, 1000); 
 
-        setTimeout(function(){ 
-            // window.onload = function() {
+        setTimeout(function(){     
                 var primeinstances2 = tippy('[data-tippy-content]');
-            // };
+            
 
             var primebsku = '{{ProductSKU}}';
             var skuclass = document.getElementsByClassName('primebsku');
@@ -844,15 +804,9 @@
         document.getElementById('prime-modal-content').innerHTML = '';
       }
     }
-    // $(document).on("click", ".pagination .pagination__nav-item", function() {
-    // //console.log("class click");
-    // resizeFunction(); 
-    // });
+
 
     window.addEventListener('resize', resizeFunction);
-    // if(userid != 4305 && userid != 3973){  
-    // window.addEventListener('scroll', resizeFunction);
-    // }
 
     let lastUrl = location.href; 
     new MutationObserver(() => {
@@ -865,7 +819,6 @@
 
     if(userid == 3973)
     {
-    //console.log("userid");
     $( window ).on( "load", function() {
     setTimeout(function(){     
         resizeFunction(); 
@@ -873,7 +826,6 @@
     });
     }
     else{
-    //console.log("load");
     window.addEventListener('load', resizeFunction);
 
     }
@@ -1219,21 +1171,6 @@
             } 
         }, 1000);
 
-        // var pos = newvalue.indexOf("CountdownTimer:");
-        // var res = newvalue.slice(pos+15, pos+34);
-        // newvalue = newvalue.replace("[[ CountdownTimer:", "" );
-        // newvalue = newvalue.replace("]]", "" );
-        //     let end = new Date(toValidDateprime2(res));
-        //     let start = new Date();
-        //     var remaintime = end - start;
-        //     var days = Math.floor(remaintime / (1000 * 60 * 60 * 24));
-        //     var hours = Math.floor((remaintime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        //     var minutes = Math.floor((remaintime % (1000 * 60 * 60)) / (1000 * 60));
-        //     var seconds = Math.floor((remaintime % (1000 * 60)) / 1000);
-        //     var realtimeleft = days + "d "+hours + "h "+minutes + "m "+seconds + "s";
-        //     if(seconds < 0){
-        //         realtimeleft = "0d 0h 0m 0s";
-        //     }
              
     }
 
