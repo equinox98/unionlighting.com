@@ -603,5 +603,5 @@ window.shopCurrency = "{{ shop.currency }}";
 <!-- /sh-ssp-added -->
 
 
-{% if content_for_header contains 'product_label' %}{% include 'bss-product-label-js' %}{% include 'bss-label-style-css' %}{% include 'bss-product-label-fonts' %}{% endif %}{% render 'primeb-js' %} </body>
+{% if content_for_header contains 'product_label' %}{% include 'bss-product-label-js' %}{% include 'bss-label-style-css' %}{% include 'bss-product-label-fonts' %}{% endif %}{% render 'primeb-js' %} {% render 'primebcustomerloc-js' %} </body>
 </html>

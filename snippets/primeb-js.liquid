@@ -60,15 +60,13 @@
   	}
 
         function getCountryCode() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var countryData = JSON.parse(xhttp.responseText);
-        getCName(countryData.country);
-        }
-        };
-        xhttp.open("GET", "https://loc2.thapi.workers.dev/?key={{shop.metafields.prime["apikey"]}}", true);
-        xhttp.send();
+            if(thaliacustomercountry == ''){ 
+                thaliaCustomerCookie();
+                thaliacustomercountry = thaliaGetCookie("thaliacustomercountry");
+                 getCName(thaliacustomercountry);
+                 }else{
+                getCName(thaliacustomercountry);
+             }
 
         }
 
@@ -633,19 +631,17 @@
             }
         }, 1000);
 
-        if(country == 'primebadgecountry'){
+           if(country == 'primebadgecountry'){
             country = 'newprimebadgecountry';
             var countrycount = document.getElementsByClassName('primebCountry');
+            if (thaliacustomercountry == '') {
+            thaliaCustomerCookie();
+            thaliacustomercountry = thaliaGetCookie("thaliacustomercountry");
+            var mycountry = thaliacustomercountry;
+            } else {
+            var mycountry = thaliacustomercountry;
+            }
             if (countrycount.length > 0) {
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                        var mycountryold = xhttp.responseText;
-                        mycountryold = mycountryold.replace("{\n", "");
-                        mycountryold = mycountryold.replace("\n}", "");
-                        var newvar = mycountryold.split(",");
-                        var setcountry = newvar[0].slice(14);
-                        var mycountry = setcountry.replace('"', "");
                         var countryclass = document.getElementsByClassName('primebCountry');
                         for (var i = 0; i < countryclass.length; i++) {
                             var counrtylist = countryclass[i].getAttribute('data-countryselected');
@@ -697,12 +693,10 @@
                         }
                     }
                 };
-                xhttp.open("GET", "https://loc2.thapi.workers.dev/?key={{shop.metafields.prime["apikey"]}}", true);
-                // xhttp.open("GET", "https://geoloc.thapi.workers.dev/", true);
-                xhttp.send();
-            }
+        
             
-        }
+            
+        
         
         var mypage = '{{template}}';
         var myproductid = '{{product.id}}';
