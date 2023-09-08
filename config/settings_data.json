@@ -1495,7 +1495,7 @@
         "settings": {
           "show_announcement": true,
           "homepage_announcement": false,
-          "announcement_text": "Hassle free shipping in USA & Canada!",
+          "announcement_text": "View our lighting  <a href=\"\/collections\/best-sellers\">BESTSELLERS!<\/a>",
           "announcement_text_mobile": "",
           "announcement_link": "",
           "announcement_color": "#ffffff",
@@ -1697,6 +1697,12 @@
       "9144908965052497053": {
         "type": "shopify:\/\/apps\/glo-related-products-upsell\/blocks\/app-embed\/75cf2d86-3988-45e7-8f28-ada23c99704f",
         "disabled": true,
+        "settings": {
+        }
+      },
+      "3787308784794087151": {
+        "type": "shopify:\/\/apps\/tipo-appointment-booking\/blocks\/app-embed\/efe4d483-fa62-4509-a0a7-3f363fbc9920",
+        "disabled": false,
         "settings": {
         }
       }
