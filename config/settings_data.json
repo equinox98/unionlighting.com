@@ -1495,7 +1495,7 @@
         "settings": {
           "show_announcement": true,
           "homepage_announcement": false,
-          "announcement_text": "View our lighting  <a href=\"\/collections\/best-sellers\">BESTSELLERS!<\/a>",
+          "announcement_text": "Hassle free shipping in USA & Canada!",
           "announcement_text_mobile": "",
           "announcement_link": "",
           "announcement_color": "#ffffff",
@@ -1671,12 +1671,6 @@
       },
       "855628211100114053": {
         "type": "shopify:\/\/apps\/klaviyo-email-marketing-sms\/blocks\/klaviyo-onsite-embed\/2632fe16-c075-4321-a88b-50b567f42507",
-        "disabled": false,
-        "settings": {
-        }
-      },
-      "9278379683843197553": {
-        "type": "shopify:\/\/apps\/appointo\/blocks\/app-embed\/8e9086b8-9c22-4cd3-b1d1-0967727a5d97",
         "disabled": false,
         "settings": {
         }
