@@ -704,6 +704,20 @@
               "position_2": "first",
               "size_2": "small"
             }
+          },
+          "88ae9607-6bd7-4e42-a5c4-389306cc1ba8": {
+            "type": "meganav_images",
+            "settings": {
+              "meganav_trigger": "Mirrors+Decor",
+              "text_1": "Mirrors+Decor",
+              "link_1": "",
+              "position_1": "first",
+              "size_1": "small",
+              "text_2": "",
+              "link_2": "",
+              "position_2": "first",
+              "size_2": "small"
+            }
           }
         },
         "block_order": [
@@ -717,7 +731,8 @@
           "3fbf8d2d-4aab-45ac-8464-9849d6207445",
           "966147a4-efad-441d-880f-a8ac52085fe3",
           "7e1c9916-fe71-46f0-899d-6219a5556259",
-          "c77f2bda-ccdb-4bba-b9c6-52fb29905fa8"
+          "c77f2bda-ccdb-4bba-b9c6-52fb29905fa8",
+          "88ae9607-6bd7-4e42-a5c4-389306cc1ba8"
         ],
         "settings": {
           "sticky_header": true,
