@@ -516,6 +516,11 @@
     "checkout": {
       "address_management": {
         "confirm_address_deletion": "Êtes-vous sûr de vouloir supprimer l'adresse {{address}}?"
+      },
+      "shipping": {
+        "merchandise_quantity_label": {
+          "standard": "%{count} articles"
+        }
       }
     }
   }
