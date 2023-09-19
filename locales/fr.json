@@ -540,5 +540,17 @@
         }
       }
     }
+  },
+  "customer_accounts": {
+    "orders": {
+      "order_status": {
+        "amazon_buy_with_prime": {
+          "order_tracking_link": {
+            "text": "Suivre et gérer la commande Buy with Prime",
+            "new_window_disclaimer": "(ouvre une nouvelle fenêtre)"
+          }
+        }
+      }
+    }
   }
 }
