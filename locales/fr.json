@@ -521,6 +521,12 @@
         "merchandise_quantity_label": {
           "standard": "%{count} articles"
         }
+      },
+      "payment": {
+        "gift_card_wrapper": {
+          "apply_another_gift_card_label": "Appliquer une autre carte cadeau",
+          "gift_card_label": "Carte cadeau %{identifier}"
+        }
       }
     }
   }
