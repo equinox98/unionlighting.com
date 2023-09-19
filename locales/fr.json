@@ -512,6 +512,11 @@
       "cart": {
         "gift_card_with_components_not_supported": "Le produit groupé '%{name}' ne peut pas être ajouté au panier."
       }
+    },
+    "checkout": {
+      "address_management": {
+        "confirm_address_deletion": "Êtes-vous sûr de vouloir supprimer l'adresse {{address}}?"
+      }
     }
   }
 }
