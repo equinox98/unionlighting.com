@@ -527,6 +527,17 @@
           "apply_another_gift_card_label": "Appliquer une autre carte cadeau",
           "gift_card_label": "Carte cadeau %{identifier}"
         }
+      },
+      "thank_you": {
+        "branded_promise": {
+          "buy_with_prime": {
+            "order_tracking_link_text": "Suivre et gérer la commande Buy with Prime",
+            "shipping_method": {
+              "with_promise": "Prime, arrivée %{date} - Livraison et retours gratuits",
+              "without_promise": "Prime - Livraison et retours gratuits"
+            }
+          }
+        }
       }
     }
   }
