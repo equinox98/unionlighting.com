@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "dynamic-featured-product": {
+      "type": "dynamic-featured-product",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "dynamic-featured-product"
+  ]
+}
