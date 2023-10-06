@@ -1511,7 +1511,7 @@
           "show_announcement": true,
           "homepage_announcement": false,
           "announcement_text": "Hassle free shipping in USA & Canada",
-          "announcement_text_mobile": "",
+          "announcement_text_mobile": "SAVE WITH CODE: UNIONTHANKSU",
           "announcement_link": "",
           "announcement_color": "#ffffff",
           "announcement_background": "#0d2b35"
@@ -1678,20 +1678,8 @@
       "1594762009925"
     ],
     "blocks": {
-      "3062113278708352188": {
-        "type": "shopify:\/\/apps\/gropulse-rich-snippets-for-seo\/blocks\/gropulse-rich-snippets\/067179e8-363f-48e1-8ee4-5891cda502fa",
-        "disabled": false,
-        "settings": {
-        }
-      },
       "855628211100114053": {
         "type": "shopify:\/\/apps\/klaviyo-email-marketing-sms\/blocks\/klaviyo-onsite-embed\/2632fe16-c075-4321-a88b-50b567f42507",
-        "disabled": false,
-        "settings": {
-        }
-      },
-      "4015264832934714879": {
-        "type": "shopify:\/\/apps\/ecomsend-popups\/blocks\/app\/a5670cf8-5705-4b01-ad9e-447033feae26",
         "disabled": false,
         "settings": {
         }
@@ -1707,12 +1695,6 @@
         "disabled": false,
         "settings": {
           "directionRTL": false
-        }
-      },
-      "9144908965052497053": {
-        "type": "shopify:\/\/apps\/glo-related-products-upsell\/blocks\/app-embed\/75cf2d86-3988-45e7-8f28-ada23c99704f",
-        "disabled": true,
-        "settings": {
         }
       },
       "3787308784794087151": {
