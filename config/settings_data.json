@@ -1510,8 +1510,8 @@
         "settings": {
           "show_announcement": true,
           "homepage_announcement": false,
-          "announcement_text": "save 20% with code: UNIONTHANKSU",
-          "announcement_text_mobile": "Hassle free shipping in USA & Canada",
+          "announcement_text": "",
+          "announcement_text_mobile": "save 20% with code: UNIONTHANKSU",
           "announcement_link": "",
           "announcement_color": "#ffffff",
           "announcement_background": "#0d2b35"
