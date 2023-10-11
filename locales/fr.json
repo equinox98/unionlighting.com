@@ -539,6 +539,9 @@
             }
           }
         }
+      },
+      "payment_errors": {
+        "available_methods_updated": "Les méthodes de paiement disponibles ont été mises à jour."
       }
     }
   },
