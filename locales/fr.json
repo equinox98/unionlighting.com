@@ -557,6 +557,14 @@
         "attempted_to_deliver_label": "Tentative de livraison",
         "there_was_a_problem_label": "Il y a eu un problème"
       }
+    },
+    "profile_preview_bar": {
+      "customize_button": "Personnaliser",
+      "hide_bar": "Barre de dissimulation",
+      "navigate_to_admin": "Naviguer vers l'administrateur",
+      "previewing": "Vous êtes en train de visualiser :",
+      "saved_at": "Sauvegardé {{date}} à {{time}}",
+      "viewing": "You're viewing :"
     }
   }
 }
