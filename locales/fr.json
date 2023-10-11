@@ -553,7 +553,9 @@
             "text": "Suivre et gérer la commande Buy with Prime",
             "new_window_disclaimer": "(ouvre une nouvelle fenêtre)"
           }
-        }
+        },
+        "attempted_to_deliver_label": "Tentative de livraison",
+        "there_was_a_problem_label": "Il y a eu un problème"
       }
     }
   }
