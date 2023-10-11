@@ -520,7 +520,8 @@
       "shipping": {
         "merchandise_quantity_label": {
           "standard": "%{count} articles"
-        }
+        },
+        "split_cart_merchandise_shipment_number": "Expédition %{number} de %{total}"
       },
       "payment": {
         "gift_card_wrapper": {
