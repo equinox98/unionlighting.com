@@ -565,7 +565,8 @@
       "navigate_to_admin": "Naviguer vers l'administrateur",
       "previewing": "Vous êtes en train de visualiser :",
       "saved_at": "Sauvegardé {{date}} à {{time}}",
-      "viewing": "You're viewing :"
+      "viewing": "You're viewing :",
+      "close_preview": "Fermer l'aperçu"
     }
   }
 }
