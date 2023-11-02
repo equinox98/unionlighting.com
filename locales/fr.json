@@ -521,7 +521,8 @@
         "merchandise_quantity_label": {
           "standard": "%{count} articles"
         },
-        "split_cart_merchandise_shipment_number": "Expédition %{number} de %{total}"
+        "split_cart_merchandise_shipment_number": "Expédition %{number} de %{total}",
+        "split_cart_shipping_label": "Méthode"
       },
       "payment": {
         "gift_card_wrapper": {
