@@ -1510,8 +1510,8 @@
         "settings": {
           "show_announcement": true,
           "homepage_announcement": false,
-          "announcement_text": "Save 20% with code: EARLYACCESS20\n\nFree shipping over 300$*",
-          "announcement_text_mobile": "Save 20% with code: EARLYACCESS20\n\nFree shipping over 300$*",
+          "announcement_text": "Save 20% with code: EARLYACCESS20\n\n| FREE shipping over 300$*",
+          "announcement_text_mobile": "Save 20% with code: EARLYACCESS20\n\n| FREE shipping over 300$*",
           "announcement_link": "",
           "announcement_color": "#ffffff",
           "announcement_background": "#0d2b35"
