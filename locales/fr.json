@@ -522,7 +522,8 @@
           "standard": "%{count} articles"
         },
         "split_cart_merchandise_shipment_number": "Expédition %{number} de %{total}",
-        "split_cart_shipping_label": "Méthode"
+        "split_cart_shipping_label": "Méthode",
+        "split_cart_ships_date": "Navires %{date}"
       },
       "payment": {
         "gift_card_wrapper": {
