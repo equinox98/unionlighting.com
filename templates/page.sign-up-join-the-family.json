@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main-page": {
+      "type": "static-blog",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "main-page"
+  ]
+}
