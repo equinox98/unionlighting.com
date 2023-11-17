@@ -1510,8 +1510,8 @@
         "settings": {
           "show_announcement": true,
           "homepage_announcement": false,
-          "announcement_text": "Free Shipping Over $300* | Enjoy 20% off with code EARLYACCESS20*",
-          "announcement_text_mobile": "Free Shipping Over $300* | Enjoy 20% off with code EARLYACCESS20*",
+          "announcement_text": "Free Shipping Over $300* | Enjoy 20% off with code EARLYACCESS20 *",
+          "announcement_text_mobile": "Free Shipping Over $300* | Enjoy 20% off with code EARLYACCESS20 *",
           "announcement_link": "",
           "announcement_color": "#ffffff",
           "announcement_background": "#0d2b35"
