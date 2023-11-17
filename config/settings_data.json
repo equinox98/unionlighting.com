@@ -1510,8 +1510,8 @@
         "settings": {
           "show_announcement": true,
           "homepage_announcement": false,
-          "announcement_text": "Free Shipping Over $300*",
-          "announcement_text_mobile": "Save 20% with code: UNIONTHANKSU\n\n| FREE shipping over 300$*",
+          "announcement_text": "Free Shipping Over $300*\n\nEnjoy 20% off earlyaccess20*",
+          "announcement_text_mobile": "Free Shipping Over $300*\n\nEnjoy 20% off earlyaccess20*",
           "announcement_link": "",
           "announcement_color": "#ffffff",
           "announcement_background": "#0d2b35"
