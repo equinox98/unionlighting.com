@@ -581,6 +581,23 @@
             {% endif %}
             <!--metafields bodytext-->
               
+
+            <!--metafields subbrand-->
+			{% if variant.metafields.specs.subbrand != blank %}
+              <p><BR><strong>Sub Brand</strong>:
+                <a id="subbrand"> 
+                  {{ variant.metafields.specs.subbrand}}
+                  {% capture 'meta_data_subbrand' %}
+                    {% for variant in product.variants %}
+                      {{ variant.sku | json }}: {{ variant.metafields.specs.subbrand | json }}
+                      {% unless forloop.last %},{% endunless %}
+                    {% endfor %}
+                  {% endcapture %}
+                </a>
+              </p>
+            {% endif %}
+            <!--metafields subbrand-->
+
               
             <!--metafields finish-->
 			{% if variant.metafields.specs.finish != blank %}
@@ -992,6 +1009,7 @@
                     });
                     
                     var metaDataManucode = { {{ meta_data_manucode }} }
+                    var metaDataMSubBrand = { {{ meta_data_subbrand }} }
                     var metaDataBodytext = { {{ meta_data_bodytext }} }
                     var metaDataFinish = { {{ meta_data_finish }} }
                     var metaDataShade = { {{ meta_data_shade }} }
@@ -1032,6 +1050,7 @@
                     var metaDatahwbasediameter = { {{ meta_data_hwbasediameter }} }
                     
                       function changeMetafields() {
+                        $('.metafields-desc a#subbrand').text(metaDataSubBrand[$('.product-sku span').text()]);
                       	$('.metafields-desc a#manucode').text(metaDataManucode[$('.product-sku span').text()]);
                       	$('.metafields-desc a#finish').text(metaDataFinish[$('.product-sku span').text()]);
                         $('.metafields-desc a#bodytext').html(metaDataBodytext[$('.product-sku span').html()]);
