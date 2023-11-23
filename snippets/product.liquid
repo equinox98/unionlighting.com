@@ -598,6 +598,21 @@
             {% endif %}
             <!--metafields subbrand-->
 
+                      <!--metafields ExtraNote-->
+			{% if variant.metafields.specs.ExtraNote != blank %}
+                <p><BR><strong>Note</strong>:
+                <a id="ExtraNote"> 
+                  {{ variant.metafields.specs.ExtraNote}}
+                  {% capture 'meta_data_ExtraNote' %}
+                    {% for variant in product.variants %}
+                      {{ variant.sku | json }}: {{ variant.metafields.specs.ExtraNote | json }}
+                      {% unless forloop.last %},{% endunless %}
+                    {% endfor %}
+                  {% endcapture %}
+                </a>
+              </p>
+            {% endif %}
+            <!--metafields ExtraNote-->
               
             <!--metafields finish-->
 			{% if variant.metafields.specs.finish != blank %}
