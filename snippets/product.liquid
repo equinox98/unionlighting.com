@@ -1024,7 +1024,8 @@
                     });
                     
                     var metaDataManucode = { {{ meta_data_manucode }} }
-                    var metaDataMSubBrand = { {{ meta_data_subbrand }} }
+                    var metaDataSubBrand = { {{ meta_data_subbrand }} }
+                    var metaDataExtraNote = { {{ meta_data_ExtraNote }} }
                     var metaDataBodytext = { {{ meta_data_bodytext }} }
                     var metaDataFinish = { {{ meta_data_finish }} }
                     var metaDataShade = { {{ meta_data_shade }} }
@@ -1066,6 +1067,7 @@
                     
                       function changeMetafields() {
                         $('.metafields-desc a#subbrand').text(metaDataSubBrand[$('.product-sku span').text()]);
+                        $('.metafields-desc a#ExtraNote').text(metaDataExtraNote[$('.product-sku span').text()]);
                       	$('.metafields-desc a#manucode').text(metaDataManucode[$('.product-sku span').text()]);
                       	$('.metafields-desc a#finish').text(metaDataFinish[$('.product-sku span').text()]);
                         $('.metafields-desc a#bodytext').html(metaDataBodytext[$('.product-sku span').html()]);
