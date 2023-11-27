@@ -505,7 +505,8 @@
         "ship": "Shipping"
       },
       "order_summary": {
-        "pickup_label": "Curbside Pickup"
+        "pickup_label": "Curbside Pickup",
+        "discount_already_applied": "This order is already discounted.  It is not possible to add an additional discount."
       },
       "thank_you": {
         "page_title": "Thank you for your purchase!"
