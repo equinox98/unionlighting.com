@@ -506,7 +506,8 @@
       },
       "order_summary": {
         "pickup_label": "Curbside Pickup",
-        "discount_already_applied": "This order is already discounted.  It is not possible to add an additional discount."
+        "discount_already_applied": "This order is already discounted.  It is not possible to add an additional discount.",
+        "cart_does_not_meet_discount_requirements_notice": "<strong style = \"text-transform:uppercase\">{{code}}<\/strong> is not valid.  Either item is already discounted or you have not met the criteria for this code"
       },
       "thank_you": {
         "page_title": "Thank you for your purchase!"
