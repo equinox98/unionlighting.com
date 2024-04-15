@@ -46,10 +46,15 @@
  			{% if key_and_value[0] == 'group' %}
  				{%- assign group = key_and_value[1] | default: '' -%}
  			{% endif%}
+
+			{% if key_and_value[0] == 'maxdisplay' %}
+ 				{%- assign maxdisplay = key_and_value[1]  | plus:0 -%}
+ 			{% endif%}
+
 	 					
  		{%- endif -%}
  	{%- endfor -%}
  	
- 	{% render 'primeb',product: product,hideAssets:'0',primebGroup:group,primebOuterClass:outerclass,primebOuterStyle:outerstyle,primebInnerClass:innerclass,primebInnerStyle:innerstyle,primebImageClass:imageclass,primebImageStyle:imagestyle,primebTextClass:textclass,primebTextStyle:textstyle %}
+ 	{% render 'primeb',product: product,hideAssets:'0',primebGroup:group,primebOuterClass:outerclass,primebOuterStyle:outerstyle,primebInnerClass:innerclass,primebInnerStyle:innerstyle,primebImageClass:imageclass,primebImageStyle:imagestyle,primebTextClass:textclass,primebTextStyle:textstyle,primebMaxDisplayBadge:maxdisplay %}
  
  {%- endfor -%}
