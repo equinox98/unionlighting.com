@@ -7,7 +7,10 @@
     //console.log(userid);
 
             document.addEventListener('DOMContentLoaded', function(event) {
-                      getCountryCode();                
+                     // getCountryCode();
+                    setTimeout(function(){ 
+                    getCountryCode();
+                    },1000);                
                 if (window.jQuery){
 
                 } else {
@@ -33,8 +36,9 @@
             </script>
 
 <script type="text/javascript">
-    
+    var countryprimeb = 'primebadgecountry';
     var existingScript = document.getElementById('primebPopper');
+    		var countryprimeb = 'primebadgecountry';
   	if (!existingScript) {
 
 		var country = 'primebadgecountry';
@@ -125,6 +129,17 @@
             checkVariantInventory(optionMap);
 
             });
+
+              $(document).on("click", ".bls__color-dropdown", function() {
+                var optionMap = [];
+                if(optionMap.length == 0){
+                    $("span.bls__color-dropdown-value").each(function(key) {
+                        optionMap[key] = $(this).text();
+                    });
+                    checkVariantInventory(optionMap);
+                }
+            });
+
             
             $(document).on("change", ".single-option-selector", function() {
                 var optionMap = [];
@@ -327,6 +342,31 @@
                 }
             });
 
+            $(document).on("click", ".block-swatch input", function() {
+                var optionMap = [];
+                if(optionMap.length == 0){
+                $(".block-swatch input[type=radio]:checked").each(function(key) {
+                    optionMap[key] = $(this).val();
+                });
+                checkVariantInventory(optionMap);
+                }
+            });
+
+            $(document).on("click", ".variant-input-wrap", function() {
+                var optionMap = [];
+                if(optionMap.length == 0){
+                    setTimeout(function() {
+                    $(".variant-input-wrap input[type=radio]:checked").each(function(key) {
+                    optionMap[key] = $(this).val();
+                    }, 600);
+                    });
+                    setTimeout(function() { 
+                    checkVariantInventory(optionMap);
+                    }, 600);
+
+                }
+            });
+
             $(document).on("click", ".option-selector__btns input", function() {
                 var optionMap = [];
                 if(optionMap.length == 0){
@@ -376,7 +416,10 @@
 
     window.addEventListener('load', (event) => {
         primebCountdownTimer();
-              getCountryCode(); 
+              //getCountryCode(); 
+            setTimeout(function(){ 
+            getCountryCode();
+            },1000);
         document.getElementById("prime-modal-close").onclick = function() {mymodalprimeb()};
         window.onclick = function(event) {
             if (event.target.classList[1] == 'prime-modal-open') {
@@ -392,7 +435,10 @@
         // Element is visible, perform desired actions here
         // Call your function here
         primebCountdownTimer();
-        getCountryCode(); 
+        //getCountryCode(); 
+        setTimeout(function(){ 
+        getCountryCode();
+        },1000);
         // Stop observing the target element
         observer.unobserve(entry.target);
         }
@@ -517,26 +563,27 @@
                     var primebInnerStyle = primeBadgesAll[i].getAttribute('data-primebInnerStyle');
                     var primebGroup = primeBadgesAll[i].getAttribute('data-primebGroup');
                     var primebProductId = primeBadgesAll[i].getAttribute('data-primeproductsid');
+                    var primebMaxDisplayBadge=parseInt(primeBadgesAll[i].getAttribute('data-primebMaxDisplayBadge'));
                     if(primebProductId == variantproductid){
-                        hitprimebpage(productname,variantproductid,primebOuterClass,primebOuterStyle,primebInnerClass,primebInnerStyle,primebGroup,realval)
+                        hitprimebpage(productname,variantproductid,primebOuterClass,primebOuterStyle,primebInnerClass,primebInnerStyle,primebGroup,primebMaxDisplayBadge,realval)
                     }
                 }
             }
         }
         setTimeout(function(){ 
         getCountryCode();
-        },500);
+        },1000);
     }
 
 
-    function hitprimebpage(productname,variantproductid,primebOuterClass,primebOuterStyle,primebInnerClass,primebInnerStyle,primebGroup,realval) {
+    function hitprimebpage(productname,variantproductid,primebOuterClass,primebOuterStyle,primebInnerClass,primebInnerStyle,primebGroup,primebMaxDisplayBadge,realval) {
         var result = Math.random().toString(36).substring(2,7);
         if(primebGroup == 1){
-			var urlhit = productname+'/?view=primebvariant&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==1&page=='+realval;
+			var urlhit = productname+'/?view=primebvariant&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==1&primebMaxDisplayBadge=='+primebMaxDisplayBadge+'&page=='+realval;
         }else if(primebGroup == 2){
-			var urlhit = productname+'/?view=primebvarianttwo&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==2&page=='+realval;
+			var urlhit = productname+'/?view=primebvarianttwo&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==2&primebMaxDisplayBadge=='+primebMaxDisplayBadge+'&page=='+realval;
         }else{
-            var urlhit = productname+'/?view=primebvariantthree&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==3&page=='+realval;
+            var urlhit = productname+'/?view=primebvariantthree&sort_by='+result+'&outerclass=='+primebOuterClass+'&outerstyle=='+primebOuterStyle+'&innerclass=='+primebInnerClass+'&innerstyle=='+primebInnerStyle+'&group==3&primebMaxDisplayBadge=='+primebMaxDisplayBadge+'&page=='+realval;
         }
         var xhr = new XMLHttpRequest();
         xhr.open("GET", urlhit, true);
@@ -550,14 +597,14 @@
                     }else{
                         $('.outerprimeb'+variantproductid+'-'+primebGroup).replaceWith( this.responseText );
                         $('.outerprimeb'+variantproductid+'-'+primebGroup+' .prime-counter').removeClass("prime-counter");
-                        var countryclass = document.getElementsByClassName('primebCountry');
-                        for (var i = 0; i < countryclass.length; i++) {
-                            var counrtylist = countryclass[i].getAttribute('data-countryselected');
+                        var countryclassprimeb = document.getElementsByClassName('primebCountry');
+                        for (var i = 0; i < countryclassprimeb.length; i++) {
+                            var counrtylist = countryclassprimeb[i].getAttribute('data-countryselected');
                             var position = counrtylist.search(primebcountryName);
                             if(position < 0){ 
-                                countryclass[i].style.cssText = 'display:none !important';
+                                countryclassprimeb[i].style.cssText = 'display:none !important';
                             }else{
-                                countryclass[i].style.display= 'block';
+                                countryclassprimeb[i].style.display= 'block';
                             }
                         }
                         // primebcountryName = '';
@@ -594,7 +641,8 @@
                 for (var i = 0; i < primebText.length; i++) {
                     var value = primebText[i].innerHTML;
                     if( value.indexOf("CountdownTimer:") != -1  ){
-                        myTimerprime2(value,i);
+                        var metaval= primebText[i].getAttribute('data-timerval');
+                        myTimerprime2(value,i,metaval);
                     }
                 }
             }
@@ -613,6 +661,10 @@
             }
 
         }, 1000); 
+        if(userid == 8824)
+        {
+        removebadge();
+        }
 
         setTimeout(function(){     
                 var primeinstances2 = tippy('[data-tippy-content]');
@@ -631,30 +683,30 @@
             }
         }, 1000);
 
-           if(country == 'primebadgecountry'){
-            country = 'newprimebadgecountry';
+           if(countryprimeb == 'primebadgecountry'){
+            countryprimeb = 'newprimebadgecountry';
             var countrycount = document.getElementsByClassName('primebCountry');
             if (thaliacustomercountry == '') {
             thaliaCustomerCookie();
             thaliacustomercountry = thaliaGetCookie("thaliacustomercountry");
-            var mycountry = thaliacustomercountry;
+            var mycountryprimeb = thaliacustomercountry;
             } else {
-            var mycountry = thaliacustomercountry;
+            var mycountryprimeb = thaliacustomercountry;
             }
             if (countrycount.length > 0) {
-                        var countryclass = document.getElementsByClassName('primebCountry');
-                        for (var i = 0; i < countryclass.length; i++) {
-                            var counrtylist = countryclass[i].getAttribute('data-countryselected');
-                            var position = counrtylist.search(mycountry);
-                            primebcountryName = mycountry;
+                        var countryclassprimeb = document.getElementsByClassName('primebCountry');
+                        for (var i = 0; i < countryclassprimeb.length; i++) {
+                            var primebcounrtylist = countryclassprimeb[i].getAttribute('data-countryselected');
+                            var position = primebcounrtylist.search(mycountryprimeb);
+                            primebcountryName = mycountryprimeb;
                             if(position < 0){ 
-                                countryclass[i].style.cssText = 'display:none !important';
+                                countryclassprimeb[i].style.cssText = 'display:none !important';
                             }else{
-                                countryclass[i].style.display= 'block';
-                                countryclass[i].setAttribute('countryrule', '1');
+                                countryclassprimeb[i].style.display= 'block';
+                                countryclassprimeb[i].setAttribute('countryrule', '1');
 
-                                if (countryclass[i].classList.contains('primebScreenSize')) {
-                                    var screenlist = countryclass[i].getAttribute('data-screensizeselected');
+                                if (countryclassprimeb[i].classList.contains('primebScreenSize')) {
+                                    var screenlist = countryclassprimeb[i].getAttribute('data-screensizeselected');
                                     var screensizeArray = screenlist.split(",");
                                     var smdevice = window.matchMedia( "screen and (max-width: 767.98px)" );
                                     var mddevice = window.matchMedia( "screen and (min-width: 768px) and (max-width: 991.98px)" );
@@ -665,31 +717,35 @@
                                         if(screensizeArray[0] == '1'){
                                             // countryclass[i].style.display= 'block';
                                         }else{
-                                            countryclass[i].style.setProperty("display", "none", "important");
+                                            countryclassprimeb[i].style.setProperty("display", "none", "important");
                                         }
                                     }else if( mddevice.matches){
                                         if(screensizeArray[1] == '1'){
                                             // countryclass[i].style.display= 'block';
                                         }else{
-                                            countryclass[i].style.setProperty("display", "none", "important");
+                                            countryclassprimeb[i].style.setProperty("display", "none", "important");
                                         }
                                     }else if(lgdevice.matches){
                                         if(screensizeArray[2] == '1'){
                                             // countryclass[i].style.display= 'block';
                                         }else{
-                                            countryclass[i].style.setProperty("display", "none", "important");
+                                            countryclassprimeb[i].style.setProperty("display", "none", "important");
                                         }
                                     }else{
                                         if(screensizeArray[3] == '1'){
                                             // countryclass[i].style.display= 'block';
                                         }else{
-                                            countryclass[i].style.setProperty("display", "none", "important");
+                                            countryclassprimeb[i].style.setProperty("display", "none", "important");
                                         }
                                     }
 
                                 }
                                 
                             }
+                        }
+                        if(userid == 8824)
+                        {
+                        removebadge();
                         }
                     }
                 };
@@ -781,6 +837,10 @@
                         var removeloop3 = removeloop2.parentElement;
                         removeloop3.style.visibility = 'hidden';
                         primevisits[i].classList.remove("primebloop");
+                        if(userid == 8824)
+                        {
+                        removebadge();
+                        }
                     }
                         
                 }
@@ -823,7 +883,21 @@
     window.addEventListener('load', resizeFunction);
 
     }
-   
+
+      function removebadge() {
+         var primeb = document.getElementsByClassName('primebDesktop');
+        if(primeb[0]){
+          var remove_div1 = document.getElementsByClassName('primeBadges');
+          remove_div1[0].style.display= 'block';
+        } else {
+            var remove_div1 = document.getElementsByClassName('primeBadges');
+            if(remove_div1[0]){
+              remove_div1[0].style.cssText = 'display:none !important';
+              // remove_div1[0].parentNode.removeChild(remove_div1[0]);
+            }
+        }
+         
+    } 
 
 
     window.addEventListener('resize', screensizeFunction);
@@ -1055,7 +1129,7 @@
         return datestring.replace(/(\d{2})(\/)(\d{2})/, "$3$2$1");   
     }
 
-    function myTimerprime2(newvalue,count) {
+    function myTimerprime2(newvalue,count,metaval) {
         var primebText2 = document.getElementsByClassName('primebText');
 
         var againvalue = newvalue;
@@ -1065,7 +1139,14 @@
             pos4 = newvalue.indexOf(" ]]");
             var res = newvalue.slice(pos3+18, pos4);
         }else{
-            var res = newvalue.slice(pos3+18, pos4+1);
+                  
+                    if(metaval)
+                    {          
+                    var res = metaval;
+
+                    }else{
+                    var res = newvalue.slice(pos3 + 18, pos4 + 1);
+                    }
         }
         var pos5 = newvalue.indexOf(" ]]");
         var pos6 = newvalue.indexOf("|");

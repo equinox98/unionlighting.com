@@ -18,8 +18,12 @@
 			{% assign primebCompanyName = customer.current_company.name | downcase %}
 			{% assign primebPublishedDate = product.published_at | date: "%s" %}
 			{% assign primebPublishDateDiff = "now" | date: "%s" | minus: primebPublishedDate %}
-			{% assign primebTemplate = primePageType | default: template | downcase %}
-			{% assign primebLanguage = request.locale.iso_code %}
+			{% if primebPageType %}
+			{% assign primebTemplate = primebPageType | downcase %}
+			{% else %}
+			{% assign primebTemplate = request.page_type | default: template | downcase %}
+			{% endif %}
+			{% assign primebLanguage = request.locale.iso_code | downcase %}
 			{% assign primemetafield = primebProduct.metafields %}	
 			{% assign primebProductTitle = primebProduct.title | downcase %}
 			{% assign primebProductType = primebProduct.type | downcase %}
@@ -29,7 +33,12 @@
 			{% assign primebUTC = "now" | date: "%s" %}
 			{% assign primebstartTime = "633891600"  %}
 			{% assign primebEndTime = "2053962000"  %}
-			{% assign primebMaxDisplayBadge = primebMaxDisplayBadge | default: 10 %}	
+			{% if primebMaxDisplayBadge %}
+				{% assign primebMaxDisplayBadge = primebMaxDisplayBadge %}
+				{% else %}
+				{% assign primebMaxDisplayBadge = primebMaxDisplayBadge | default: 10 %}
+			{% endif %}
+	
 			{% assign primebCreatedDateSec = primebProduct.created_at | date: "%s" %}
 			{% assign primebDateDiff = "now" | date: "%s" | minus: primebCreatedDateSec %}
 			{% assign primebCollectionIds = primebProduct.collections | map: "id" | default: 0  %}			
@@ -108,7 +117,7 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}		
-			{% endfor %}<div class="primeBadges outerprimeb{{product.id}}-{{primeGroup}} {{primebOuterClass}} prime-d-block " style="{{ primebOuterStyle }}" data-primeproductsid="{{product.id}}" data-primebOuterClass="{{primebOuterClass}}" data-primebOuterStyle="{{primebOuterStyle}}" data-primebInnerClass="{{primebInnerClass}}" data-primebInnerStyle="{{primebInnerStyle}}" data-primebGroup="{{primeGroup}}" >	
+			{% endfor %}<div class="primeBadges outerprimeb{{product.id}}-{{primeGroup}} {{primebOuterClass}} prime-d-block " style="{{ primebOuterStyle }}" data-primeproductsid="{{product.id}}" data-primebOuterClass="{{primebOuterClass}}" data-primebOuterStyle="{{primebOuterStyle}}" data-primebInnerClass="{{primebInnerClass}}" data-primebInnerStyle="{{primebInnerStyle}}" data-primebGroup="{{primeGroup}}" data-primebMaxDisplayBadge="{{primebMaxDisplayBadge}}" >	
   	{% comment %} Start Badge: 1 {% endcomment %}
   	{% if primebBadgeCounter <= primebMaxDisplayBadge %}
   	 {% assign isStartbShowBadge = false %} {% assign primebProductTags = "Popular Picks_Best Seller" | split: "," %}{% assign isprimebProductTagFound0 = false %}
@@ -144,7 +153,7 @@
 <div class="primebDesktop {{primebInnerClass}} primeb-22119       "   data-countryselected= '' data-screensizeselected= ''  countryrule=1 visitorcountryrule=0 onclick="redirectLinkbadge('','0','22119','1');" style="{{ primebInnerStyle }}  ">
 
     <div style="box-sizing: border-box; color: rgb(13, 43, 53); font-size: 13px; position: relative; max-width: 100%; border-radius: 0.3em; padding: 0.25em 0.5em; background-image: linear-gradient(to right, rgb(243, 233, 226), rgb(243, 233, 226)); opacity: 1;">        
-        <div  class="badgetitle primebText prime-font-adjust " data-primeproductid='{{product.id}}' data-defaultsize= '13px' data-mobilesize= '11' data-tabletsize= '12' style="white-space: normal; overflow: hidden; text-align: center;">
+        <div  class="badgetitle primebText prime-font-adjust " data-primeproductid='{{product.id}}' data-timerval='{{  }}' data-defaultsize= '13px'  data-mobilesize= '11' data-tabletsize= '12' style="white-space: normal; overflow: hidden; text-align: center;">
             {% if lastbstring == '' %}
                 Best Seller
             {% else %}
@@ -194,7 +203,7 @@
 <div class="primebDesktop {{primebInnerClass}} primeb-22139       "   data-countryselected= '' data-screensizeselected= ''  countryrule=1 visitorcountryrule=0 onclick="redirectLinkbadge('','0','22139','1');" style="{{ primebInnerStyle }}  ">
 
     <div style="box-sizing: border-box; color: rgb(0, 0, 0); font-size: 13px; position: relative; max-width: 100%; border-radius: 0.3em; padding: 0.25em 0.5em; background-image: linear-gradient(to right, rgb(243, 233, 226), rgb(243, 233, 226)); opacity: 1;">        
-        <div  class="badgetitle primebText prime-font-adjust " data-primeproductid='{{product.id}}' data-defaultsize= '13px' data-mobilesize= '11' data-tabletsize= '12' style="white-space: normal; overflow: hidden; text-align: center;">
+        <div  class="badgetitle primebText prime-font-adjust " data-primeproductid='{{product.id}}' data-timerval='{{  }}' data-defaultsize= '13px'  data-mobilesize= '11' data-tabletsize= '12' style="white-space: normal; overflow: hidden; text-align: center;">
             {% if lastbstring == '' %}
                 In Stock
             {% else %}
